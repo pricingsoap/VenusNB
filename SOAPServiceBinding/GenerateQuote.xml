@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:operation id="18efc0d8-b391-4e87-9f32-5589c826b3da" isOneWay="false" action="GenerateQuote" name="GenerateQuote" bindingOperationName="GenerateQuote" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:con="http://eviware.com/soapui/config">
+  <con:settings>
+    <con:setting id="18efc0d8-b391-4e87-9f32-5589c826b3dafileName">GenerateQuote</con:setting>
+  </con:settings>
+  <con:call id="5f837de8-521c-4de5-9175-039334d3fdb3" name="Request 1">
+    <con:settings>
+      <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+    </con:settings>
+    <con:encoding>UTF-8</con:encoding>
+    <con:endpoint>http://rh0124v:18026/SOAPServiceBinding/BSROS_GenerateQuote_NB/</con:endpoint>
+    <con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:gen="http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2" xmlns:mes="http://www.theaa.com/CommonServices/Data/Message/MessageHeader.2" xmlns:com="http://www.theaa.com/CommonServices/Data/Common" xmlns:prod="http://www.theaa.com/CommonServices/Data/Product.2">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <gen:GenerateQuoteRequest>\r
+         <mes:RequestHeader>\r
+            <mes:TransactionId>RO-NB-1611-313</mes:TransactionId>\r
+            <mes:Version>1.0</mes:Version>\r
+            <mes:RequestDateTime>2020-07-10T00:00:01</mes:RequestDateTime>\r
+            <mes:Source>\r
+               <mes:Domain>SALES</mes:Domain>\r
+               <mes:Channel>SanityTesting</mes:Channel>\r
+               <mes:LineOfBusiness>ROS</mes:LineOfBusiness>\r
+               <mes:Name>Pricing Services</mes:Name>\r
+               <mes:User>PS Testing</mes:User>\r
+            </mes:Source>\r
+         </mes:RequestHeader>\r
+         <gen:ProductList>\r
+            <prod:EffectivePriceDateTime>2020-07-10T00:00:01</prod:EffectivePriceDateTime>\r
+            <prod:PolicyStartDateTime>2020-07-10T00:00:01</prod:PolicyStartDateTime>\r
+            <prod:PolicyEndDateTime>2021-07-09T23:59:59</prod:PolicyEndDateTime>\r
+            <prod:OfferCodeDetailList>\r
+               <prod:OfferCodeDetail>\r
+                  <prod:OfferCode>ONLINE</prod:OfferCode>\r
+                  <prod:OfferCodeApplicationLevel>1</prod:OfferCodeApplicationLevel>\r
+               </prod:OfferCodeDetail>\r
+            </prod:OfferCodeDetailList>\r
+            <prod:SourceGroup>30</prod:SourceGroup>\r
+            <prod:SourceCode>INS02</prod:SourceCode>\r
+            <prod:Currency>GBP</prod:Currency>\r
+            <gen:ManConYear1>false</gen:ManConYear1>\r
+            <gen:Product>\r
+               <prod:ProductCode>PRD_UK_0002</prod:ProductCode>\r
+            </gen:Product>\r
+         
+            <gen:CoveredPersons>0</gen:CoveredPersons>\r
+            <!--prod:AgentDiscountRequestedList>
+               <prod:AgentDiscountRequested>
+                  <prod:AgentDiscountCode>ABC1C</prod:AgentDiscountCode>
+                  <prod:AgentDiscountType>M</prod:AgentDiscountType>
+                  <prod:AgentDiscountValue>5</prod:AgentDiscountValue>
+               </prod:AgentDiscountRequested>
+            </prod:AgentDiscountRequestedList-->\r
+         </gen:ProductList>\r
+         <gen:CustomerDetails>\r
+            <gen:Postcode>BA2 3RD</gen:Postcode>\r
+         </gen:CustomerDetails>\r
+      </gen:GenerateQuoteRequest>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request>
+    <con:credentials>
+      <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+      <con:authType>No Authorization</con:authType>
+    </con:credentials>
+    <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+    <con:wsaConfig mustUnderstand="NONE" version="200508" action="GenerateQuote"/>
+    <con:wsrmConfig version="1.2"/>
+  </con:call>
+  <con:call id="1df04c78-2a76-4183-8b60-d5e51d38dd79" name="Request 2">
+    <con:settings>
+      <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+    </con:settings>
+    <con:encoding>UTF-8</con:encoding>
+    <con:endpoint>http://rh0124v:18026/SOAPServiceBinding/BSROS_GenerateQuote_NB/</con:endpoint>
+    <con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:gen="http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2" xmlns:mes="http://www.theaa.com/CommonServices/Data/Message/MessageHeader.2" xmlns:com="http://www.theaa.com/CommonServices/Data/Common" xmlns:prod="http://www.theaa.com/CommonServices/Data/Product.2">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <gen:GenerateQuoteRequest>\r
+         <mes:RequestHeader>\r
+            <mes:TransactionId>RO-NB-1611-313</mes:TransactionId>\r
+            <mes:Version>1.0</mes:Version>\r
+            <mes:RequestDateTime>2020-02-01T00:00:01</mes:RequestDateTime>\r
+            <mes:Source>\r
+               <mes:Domain>SALES</mes:Domain>\r
+               <mes:Channel>SanityTesting</mes:Channel>\r
+               <mes:LineOfBusiness>ROS</mes:LineOfBusiness>\r
+               <mes:Name>Pricing Services</mes:Name>\r
+               <mes:User>PS Testing</mes:User>\r
+            </mes:Source>\r
+         </mes:RequestHeader>\r
+         <gen:ProductList>\r
+            <prod:EffectivePriceDateTime>2020-02-01T00:00:01</prod:EffectivePriceDateTime>\r
+            <prod:PolicyStartDateTime>2020-02-01T00:00:01</prod:PolicyStartDateTime>\r
+            <prod:PolicyEndDateTime>2021-01-31T23:59:59</prod:PolicyEndDateTime>\r
+            <!--prod:OfferCodeDetailList>
+               <prod:OfferCodeDetail>
+                  <prod:OfferCode>ONLINE</prod:OfferCode>
+                  <prod:OfferCodeApplicationLevel>1</prod:OfferCodeApplicationLevel>
+               </prod:OfferCodeDetail>
+            </prod:OfferCodeDetailList-->\r
+            <prod:SourceGroup>30</prod:SourceGroup>\r
+            <prod:SourceCode>INS02</prod:SourceCode>\r
+            <prod:Currency>GBP</prod:Currency>\r
+            <gen:ManConYear1>false</gen:ManConYear1>\r
+            <gen:Product>
+               <prod:ProductCode>PRD_UK_0001</prod:ProductCode>
+            </gen:Product>
+
+            <gen:Product>\r
+               <prod:ProductCode>PRD_UK_0003</prod:ProductCode>\r
+            </gen:Product>\r
+            <gen:Product>\r
+               <prod:ProductCode>PRD_UK_0004</prod:ProductCode>\r
+            </gen:Product>\r
+            <gen:CoveredPersons>2</gen:CoveredPersons>\r
+         </gen:ProductList>\r
+         <gen:CustomerDetails>\r
+            <gen:Postcode>BA2 3RD</gen:Postcode>\r
+         </gen:CustomerDetails>\r
+      </gen:GenerateQuoteRequest>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request>
+    <con:credentials>
+      <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+      <con:authType>No Authorization</con:authType>
+    </con:credentials>
+    <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+    <con:wsaConfig mustUnderstand="NONE" version="200508" action="GenerateQuote"/>
+    <con:wsrmConfig version="1.2"/>
+  </con:call>
+</con:operation>

@@ -1,0 +1,872 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase id="602ff65b-ec76-40cf-9140-b21faecdfa14" discardOkResults="false" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="Offer Code Date Banding" searchProperties="true" timeout="0" xmlns:con="http://eviware.com/soapui/config">
+  <con:settings>
+    <con:setting id="b779c910-3898-4681-89d9-6fb621140baefileName">Offer-Code-Date-Banding</con:setting>
+    <con:setting id="602ff65b-ec76-40cf-9140-b21faecdfa14fileName">Offer-Code-Date-Banding</con:setting>
+  </con:settings>
+  <con:savedRecentRuns>1</con:savedRecentRuns>
+  <con:testStep type="groovy" name="OCInitialise_Properties" id="2b82360a-9676-48ac-aa03-a7d65e440394">
+    <con:settings/>
+    <con:config>
+      <script>// initialise values
+testRunner.testCase.setPropertyValue( 'TotalOfValuesChecked',  '0')
+testRunner.testCase.setPropertyValue( 'NumOfValuesFailed',  '0')
+testRunner.testCase.setPropertyValue( 'NumOfIterations',  '0')
+testRunner.testCase.setPropertyValue( 'PaymentNumber', '1')
+
+////Feb Prices
+//testRunner.testCase.setPropertyValue('RequestDateTime','2019-09-26T07:30:00')
+//testRunner.testCase.setPropertyValue('PolicyStartDateTime','2019-09-26T07:30:00')
+//testRunner.testCase.setPropertyValue('PolicyEndDateTime','2020-09-26T07:30:00')
+//testRunner.testCase.setPropertyValue('TaxDateTime','2019-09-26T07:30:00')
+//testRunner.testCase.setPropertyValue('PriceDate','2019-09-26T07:30:00')
+//testRunner.testCase.setPropertyValue('FeesDate','2019-09-26T07:30:00')
+
+//Dec Prices
+//testRunner.testCase.setPropertyValue('RequestDateTime','2019-11-28T06:40:00')
+//testRunner.testCase.setPropertyValue('PolicyStartDateTime','2019-11-28T06:40:00')
+//testRunner.testCase.setPropertyValue('PolicyEndDateTime','2020-11-28T06:40:00')
+//testRunner.testCase.setPropertyValue('TaxDateTime','2019-11-28T06:40:00')
+//testRunner.testCase.setPropertyValue('PriceDate','2019-11-28T06:40:00')
+//testRunner.testCase.setPropertyValue('FeesDate','2019-11-28T06:40:00')
+
+////Band 1
+testRunner.testCase.setPropertyValue('RequestDateTime','2020-07-10T00:00:01')
+testRunner.testCase.setPropertyValue('PolicyStartDateTime','2020-07-10T00:00:01')
+testRunner.testCase.setPropertyValue('PolicyEndDateTime','2021-07-09T00:00:01')
+testRunner.testCase.setPropertyValue('TaxDateTime','2020-07-10T00:00:01')
+testRunner.testCase.setPropertyValue('PriceDate','2020-07-10T00:00:01')
+testRunner.testCase.setPropertyValue('FeesDate','2020-07-10T00:00:01')
+
+////Band 0
+//testRunner.testCase.setPropertyValue('RequestDateTime','2020-07-09T23:55:00')
+//testRunner.testCase.setPropertyValue('PolicyStartDateTime','2020-07-09T23:55:00')
+//testRunner.testCase.setPropertyValue('PolicyEndDateTime','2021-07-08T23:55:00')
+//testRunner.testCase.setPropertyValue('TaxDateTime','2020-07-09T23:55:00')
+//testRunner.testCase.setPropertyValue('PriceDate','2020-07-09T23:55:00')
+//testRunner.testCase.setPropertyValue('FeesDate','2020-07-09T23:55:00')
+
+////Band 2
+//testRunner.testCase.setPropertyValue('RequestDateTime','2019-12-05T06:45:00')
+//testRunner.testCase.setPropertyValue('PolicyStartDateTime','2019-12-05T06:45:00')
+//testRunner.testCase.setPropertyValue('PolicyEndDateTime','2020-12-04T06:45:00')
+//testRunner.testCase.setPropertyValue('TaxDateTime','2019-12-05T06:45:00')
+//testRunner.testCase.setPropertyValue('PriceDate','2019-12-05T06:45:00')
+//testRunner.testCase.setPropertyValue('FeesDate','2019-12-05T06:45:00')
+
+
+////Band 3
+//testRunner.testCase.setPropertyValue('RequestDateTime','2019-12-12T07:00:00')
+//testRunner.testCase.setPropertyValue('PolicyStartDateTime','2019-12-12T07:00:00')
+//testRunner.testCase.setPropertyValue('PolicyEndDateTime','2020-12-11T07:00:00')
+//testRunner.testCase.setPropertyValue('TaxDateTime','2019-12-12T07:00:00')
+//testRunner.testCase.setPropertyValue('PriceDate','2019-12-12T07:00:00')
+//testRunner.testCase.setPropertyValue('FeesDate','2019-12-12T07:00:00')
+
+
+//Creates output file
+now=new java.text.SimpleDateFormat("yyyyMMdd'T'HHmmss").format(new Date())
+
+testRunner.testCase.setPropertyValue( 'File',("N:/Systems_development/RIO/Road Renewals/Soap UI/Test Results/NBE2E/OfferCodeCheck" + now + ".txt"));
+testRunner.testCase.setPropertyValue( 'FileFailed',("N:/Systems_development/RIO/Road Renewals/Soap UI/Test Results/NBE2E/OfferCodeCheckFailed" + now + ".txt"));
+
+FileOutputStream out = new FileOutputStream(context.expand( '${#TestCase#File}' ));
+out.write();
+out.close();
+
+FileOutputStream out1 = new FileOutputStream(context.expand( '${#TestCase#FileFailed}' ));
+out1.write();
+out1.close();
+
+//write headings for the file
+firstRow="TestCase Number|Offer Code/Fee|Payment Type|Product Mix|CoverType||Price Component|Match or not|Expected value|Actual value|Difference| Difference Amount"
+BufferedWriter bw = new BufferedWriter (new FileWriter (context.expand('${#TestCase#File}'), true));
+bw.write (firstRow);
+bw.newLine();
+bw.flush();
+bw.close();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasource" name="OCRoadAll" id="9a3ace36-c7fc-48b1-b572-0d5e16beb8d6">
+    <con:settings/>
+    <con:config xsi:type="con:DataSourceStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:dataSource type="Excel">
+        <con:configuration>
+          <file>N:/Systems_development/RIO/Road Renewals/SOAP pricing/RPP-40 - Renewal offer codes/10-07-20/Input For SOAP Offer mapping checking Band 1.xlsx</file>
+          <worksheet>SOAP</worksheet>
+          <cell>A2</cell>
+          <ignoreEmpty>false</ignoreEmpty>
+          <evaluateFormulas>false</evaluateFormulas>
+        </con:configuration>
+      </con:dataSource>
+      <con:shared>false</con:shared>
+      <con:restartShared>false</con:restartShared>
+      <con:property>ID</con:property>
+      <con:property>OFFER_CODE</con:property>
+      <con:property>MAN_CON</con:property>
+      <con:property>POSTCODE</con:property>
+      <con:property>PRODUCT_TYPE</con:property>
+      <con:property>COVER</con:property>
+      <con:property>RO</con:property>
+      <con:property>RE</con:property>
+      <con:property>SM</con:property>
+      <con:property>HS</con:property>
+      <con:property>BRC</con:property>
+      <con:property>OFFER</con:property>
+      <con:property>A_D</con:property>
+      <con:property>Car_1</con:property>
+      <con:property>Car_2</con:property>
+      <con:property>Car_3</con:property>
+      <con:property>Car_4</con:property>
+      <con:property>Core SAP AQRP</con:property>
+      <con:property>Core RAP AQRP</con:property>
+      <con:property>Core CMM AQRP</con:property>
+      <con:property>BRC SAP AQRP</con:property>
+      <con:property>BRC RAP AQRP</con:property>
+      <con:property>BRC CMM AQRP</con:property>
+      <con:property>Niche SAP AQRP</con:property>
+      <con:property>Niche RAP AQRP</con:property>
+      <con:property>Niche CMM AQRP</con:property>
+      <con:property>PaymentType</con:property>
+      <con:property>SAP,RO,TYPE</con:property>
+      <con:property>SAP,RO,AMOUNT</con:property>
+      <con:property>SAP,RE,TYPE</con:property>
+      <con:property>SAP,RE,AMOUNT</con:property>
+      <con:property>SAP,HS,TYPE</con:property>
+      <con:property>SAP,HS,AMOUNT</con:property>
+      <con:property>SAP,SM,TYPE</con:property>
+      <con:property>SAP,SM,AMOUNT</con:property>
+      <con:property>SAP,BRC,TYPE</con:property>
+      <con:property>SAP,BRC,AMOUNT</con:property>
+      <con:property>RAP,RO,TYPE</con:property>
+      <con:property>RAP,RO,AMOUNT</con:property>
+      <con:property>RAP,RE,TYPE</con:property>
+      <con:property>RAP,RE,AMOUNT</con:property>
+      <con:property>RAP,HS,TYPE</con:property>
+      <con:property>RAP,HS,AMOUNT</con:property>
+      <con:property>RAP,SM,TYPE</con:property>
+      <con:property>RAP,SM,AMOUNT</con:property>
+      <con:property>RAP,BRC,TYPE</con:property>
+      <con:property>RAP,BRC,AMOUNT</con:property>
+      <con:property>CMM,RO,TYPE</con:property>
+      <con:property>CMM,RO,AMOUNT</con:property>
+      <con:property>CMM,RE,TYPE</con:property>
+      <con:property>CMM,RE,AMOUNT</con:property>
+      <con:property>CMM,HS,TYPE</con:property>
+      <con:property>CMM,HS,AMOUNT</con:property>
+      <con:property>CMM,SM,TYPE</con:property>
+      <con:property>CMM,SM,AMOUNT</con:property>
+      <con:property>CMM,BRC,TYPE</con:property>
+      <con:property>CMM,BRC,AMOUNT</con:property>
+      <con:property>M24,RO,TYPE</con:property>
+      <con:property>M24,RO,AMOUNT</con:property>
+      <con:property>M24,RE,TYPE</con:property>
+      <con:property>M24,RE,AMOUNT</con:property>
+      <con:property>M24,HS,TYPE</con:property>
+      <con:property>M24,HS,AMOUNT</con:property>
+      <con:property>M24,SM,TYPE</con:property>
+      <con:property>M24,SM,AMOUNT</con:property>
+      <con:property>M24,BRC,TYPE</con:property>
+      <con:property>M24,BRC,AMOUNT</con:property>
+      <con:property>CQM,RO,TYPE</con:property>
+      <con:property>CQM,RO,AMOUNT</con:property>
+      <con:property>CQM,RE,TYPE</con:property>
+      <con:property>CQM,RE,AMOUNT</con:property>
+      <con:property>CQM,HS,TYPE</con:property>
+      <con:property>CQM,HS,AMOUNT</con:property>
+      <con:property>CQM,SM,TYPE</con:property>
+      <con:property>CQM,SM,AMOUNT</con:property>
+      <con:property>CQM,BRC,TYPE</con:property>
+      <con:property>CQM,BRC,AMOUNT</con:property>
+      <con:startRow>0</con:startRow>
+      <con:endRow/>
+      <con:recordsPerIteration>1</con:recordsPerIteration>
+      <con:completeLastOperation>true</con:completeLastOperation>
+      <con:trimValues>false</con:trimValues>
+      <con:entitizeValues>false</con:entitizeValues>
+      <con:restartOnRun>true</con:restartOnRun>
+      <con:expandProperties>false</con:expandProperties>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="Copy of Groovy Script" id="c64fccf5-8dde-40be-a5a4-c9eed0f9d57b" disabled="true">
+    <con:settings/>
+    <con:config>
+      <script>def project = testRunner.testCase.testSuite.project;
+
+testRunner.testCase.setPropertyValue('payment','SAP');
+testRunner.runTestStep( project.testSuites['OfferCode Checks'].testCases['Offer Code Date Banding'].testSteps['OCSetup_ProductList_XML'] );
+testRunner.runTestStep( project.testSuites['OfferCode Checks'].testCases['Offer Code Date Banding'].testSteps['OCSetup_Cover_Value'] )
+testRunner.runTestStep( project.testSuites['OfferCode Checks'].testCases['Offer Code Date Banding'].testSteps['OCSetup_BRCList_XML'] )
+testRunner.runTestStep( project.testSuites['OfferCode Checks'].testCases['Offer Code Date Banding'].testSteps['OCNB Request'] )
+log.info("---------------------------------------------------------------------------------------------VALIDATION---------------------------------------------------------------------------------------------")
+
+//http://esbpreprod:18026/SOAPServiceBinding/BSROS_GenerateQuote_NB/</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="OCSetup_ProductList_XML" id="729f3ccc-974c-40d9-9a06-f023b1e62275">
+    <con:settings/>
+    <con:config>
+      <script><![CDATA[def productType = context.expand( '${OCRoadAll#PRODUCT_TYPE}' )
+def post = context.expand('${OCRoadAll#POSTCODE}')
+def SAPTax = context.expand( '${#TestCase#SAP,Tax}' )
+def id = context.expand('${OCRoadAll#ID}')
+log.info (id)
+String delimiters = "\\,|\\&";
+String[] prodArr = productType.split(delimiters);
+StringBuilder strBld = new StringBuilder();
+StringBuilder strBld2 = new StringBuilder();
+StringBuilder strBld3 = new StringBuilder();
+
+if(prodArr.length > 0)
+{
+	for (prod in prodArr)
+	{
+		strBld.append("<gen:Product>");
+		strBld.append("<prod:ProductCode>");
+		if(prod.trim().equals("Roadside"))
+		{
+			if(post.equals("JE2 3RP")||post.equals("IM99 3EP"))
+			{
+				strBld.append("PRD_UK_0014");
+				strBld2.append("PRD_UK_0014");
+				strBld3.append("Roadside");
+			}
+			else
+			{
+				strBld.append("PRD_UK_0001");
+				strBld2.append("PRD_UK_0001");
+				strBld3.append("Roadside");
+			}
+		}
+		if(prod.trim().equals("Basic Breakdown Cover"))
+		{
+			strBld.append("PRD_UK_0020");
+			strBld2.append("PRD_UK_0020");
+			strBld3.append("BasicBreakdown");
+		}
+		if(prod.trim().equals("ROCO"))
+		{
+			strBld.append("PRD_UK_0021");
+			strBld2.append("PRD_UK_0021");
+			strBld3.append("ROCO");
+		}
+		if(prod.trim().equals("ROPOV"))
+		{
+			strBld.append("PRD_UK_0023");
+			strBld2.append("PRD_UK_0023");
+			strBld3.append("ROPOV");
+		}
+		if(prod.trim().equals("Local Driver"))
+		{
+			strBld.append("PRD_UK_0022");			
+			strBld2.append("PRD_UK_0022");
+			strBld3.append("LocalDriver");
+		}
+		if(prod.trim().equals("Standby"))
+		{
+			strBld.append("PRD_UK_0030");
+			strBld2.append("PRD_UK_0030");
+			strBld3.append("Standby");
+		}
+		if(prod.trim().equals("Start Up"))
+		{
+			strBld.append("PRD_UK_0024");
+			strBld2.append("PRD_UK_0024");
+			strBld3.append("StartUp");
+		}
+		if(prod.trim().equals("Home Start"))
+		{
+			strBld.append("PRD_UK_0003");
+		}
+		if(prod.trim().equals("Relay"))
+		{
+			if(post.equals("JE2 3RP")||post.equals("IM99 3EP"))
+			{
+				strBld.append("PRD_UK_0015");	
+			}
+			else
+			{
+				strBld.append("PRD_UK_0004");
+			}
+		}
+		if(prod.trim().equals("Stay Mobile"))
+		{
+			if(post.equals("JE2 3RP")||post.equals("IM99 3EP"))
+			{
+				strBld.append("PRD_UK_0016");	
+			}
+			else
+			{
+				strBld.append("PRD_UK_0005");
+			}
+		}		
+		strBld.append("</prod:ProductCode>");
+		strBld.append("</gen:Product>");
+	}
+	if (context.expand('${OCRoadAll#BRC}').equals("Y"))
+	{
+		strBld.append("<gen:Product><prod:ProductCode>PRD_UK_0009</prod:ProductCode></gen:Product>");
+	}
+}
+taxtype="I";
+testRunner.testCase.setPropertyValue( "ProductList_XML",  strBld.toString()) //sends nodes in Request
+testRunner.testCase.setPropertyValue( "RoadList",  strBld2.toString()) //sets ROADSIDE string in Validation
+testRunner.testCase.setPropertyValue( "RoadNameList",  strBld3.toString()) //sets NAME string in Validation
+testRunner.testCase.setPropertyValue( "TaxType",  taxtype.toString())
+log.info(strBld)
+log.info(strBld2)
+log.info(strBld3)]]></script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="OCSetup_Cover_Value" id="6ef94396-456e-4827-b4fe-66e6208da551">
+    <con:settings/>
+    <con:config>
+      <script>def cover = context.expand( '${OCRoadAll#COVER}' )
+String coverToUse = "";
+
+if(cover.equals("V1"))
+{
+	coverToUse = "0";
+}
+if(cover.equals("P1"))
+{
+	coverToUse = "1";
+}
+if(cover.equals("P2"))
+{
+	coverToUse = "2";
+}
+if(cover.equals("P3"))
+{
+	coverToUse = "3";
+}
+if(cover.equals("P4"))
+{
+	coverToUse = "4";
+}
+
+testRunner.testCase.setPropertyValue( "Cover",  coverToUse)
+log.info(coverToUse)</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="OCSetup_BRCList_XML" id="b9d7fd67-385a-4500-a00b-881f2ecdf524">
+    <con:settings/>
+    <con:config>
+      <script><![CDATA[def car1 = context.expand( '${OCRoadAll#Car_1}' )
+def car2 = context.expand( '${OCRoadAll#Car_2}' )
+def car3 = context.expand( '${OCRoadAll#Car_3}' )
+def car4 = context.expand( '${OCRoadAll#Car_4}' )
+
+StringBuilder strBld = new StringBuilder();
+
+strBld.append("<gen:VehicleAgeList>")
+
+strBld.append("<gen:VehicleAge>");
+strBld.append(car1);
+strBld.append("</gen:VehicleAge>");
+
+	if(!(car2.isEmpty()||car2.equals("-")))
+	{
+		strBld.append("<gen:VehicleAge>");
+		strBld.append(car2);
+		strBld.append("</gen:VehicleAge>");
+	}
+	if(!(car3.isEmpty()||car3.equals("-")))
+	{
+		strBld.append("<gen:VehicleAge>");
+		strBld.append(car3);
+		strBld.append("</gen:VehicleAge>");
+	}
+	if(!(car4.isEmpty()||car4.equals("-")))
+	{
+		strBld.append("<gen:VehicleAge>");
+		strBld.append(car4);
+		strBld.append("</gen:VehicleAge>");
+	}		
+
+strBld.append("</gen:VehicleAgeList>");
+def brc = context.expand( '${OCRoadAll#BRC}' )
+if (brc=="Y")
+{
+	testRunner.testCase.setPropertyValue( "BRCList_XML",  strBld.toString())	
+}
+else
+{
+	def empty = ""
+	testRunner.testCase.setPropertyValue( "BRCList_XML",  empty.toString())
+}
+log.info(context.expand( '${#TestCase#BRCList_XML}' ))]]></script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="request" name="OCNB Request" id="530a0ecd-d6dc-49e7-896b-6dff2e02dcdb">
+    <con:settings/>
+    <con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:interface>SOAPServiceBinding</con:interface>
+      <con:operation>GenerateQuote</con:operation>
+      <con:request name="OCNB Request" id="8eaa508a-d729-4c43-8b65-ee3b252b4e14">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://rh0124v:18026/SOAPServiceBinding/BSROS_GenerateQuote_NB/</con:endpoint>
+        <con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:gen="http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2" xmlns:mes="http://www.theaa.com/CommonServices/Data/Message/MessageHeader.2" xmlns:com="http://www.theaa.com/CommonServices/Data/Common" xmlns:prod="http://www.theaa.com/CommonServices/Data/Product.2">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <gen:GenerateQuoteRequest>
+         <mes:RequestHeader>
+            <mes:TransactionId>RO-NB-1611-313</mes:TransactionId>
+            <mes:Version>1.0</mes:Version>
+            <mes:RequestDateTime>${#TestCase#RequestDateTime}</mes:RequestDateTime>
+            <mes:Source>
+               <mes:Domain>SALES</mes:Domain>
+               <mes:Channel>SanityTesting</mes:Channel>
+               <mes:LineOfBusiness>ROS</mes:LineOfBusiness>
+               <mes:Name>Pricing Services</mes:Name>
+               <mes:User>PS Testing</mes:User>
+            </mes:Source>
+         </mes:RequestHeader>
+         <gen:ProductList>
+            <prod:EffectivePriceDateTime>${#TestCase#PriceDate}</prod:EffectivePriceDateTime>
+            <prod:PolicyStartDateTime>${#TestCase#PolicyStartDateTime}</prod:PolicyStartDateTime>
+            <prod:PolicyEndDateTime>${#TestCase#PolicyEndDateTime}</prod:PolicyEndDateTime>
+            <prod:OfferCodeDetailList>
+               <prod:OfferCodeDetail>
+                  <prod:OfferCode>${OCRoadAll#OFFER_CODE}</prod:OfferCode>
+                  <prod:OfferCodeApplicationLevel>1</prod:OfferCodeApplicationLevel>
+               </prod:OfferCodeDetail>
+            </prod:OfferCodeDetailList>
+            <prod:SourceGroup>30</prod:SourceGroup>
+            <prod:SourceCode>INS02</prod:SourceCode>
+            <prod:Currency>GBP</prod:Currency>
+            <gen:ManConYear1>false</gen:ManConYear1>
+            ${#TestCase#ProductList_XML}
+            ${#TestCase#BRCList_XML}
+          
+            <gen:CoveredPersons>${#TestCase#Cover}</gen:CoveredPersons>
+<!--            ${#TestCase#AgentDiscount_XML}-->
+         </gen:ProductList>
+         <gen:CustomerDetails>
+            <gen:Postcode>${OCRoadAll#POSTCODE}</gen:Postcode>
+         </gen:CustomerDetails>
+      </gen:GenerateQuoteRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request>
+        <con:assertion type="SOAP Response" id="2b731f21-f290-4a01-a4a1-d39e47d7e986"/>
+        <con:credentials>
+          <con:selectedAuthProfile>Inherit From Parent</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:wsaConfig mustUnderstand="NONE" version="200508"/>
+        <con:wsrmConfig version="1.2"/>
+      </con:request>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="OCPayment" id="8bc926a4-4035-4522-9269-70f4143e7490">
+    <con:settings/>
+    <con:config>
+      <script>testRunner.testCase.setPropertyValue( 'ID',  context.expand( '${OCRoadAll#ID}' ))
+def ID = context.expand( '${OCRoadAll#ID}' )
+def productType = context.expand( '${OCRoadAll#PRODUCT_TYPE}' )
+def paymentflag = context.expand( '${OCRoadAll#PaymentType}' )
+def SAP,RAP,CMM,M24,CQM
+
+log.info(paymentflag)
+
+if(paymentflag.equals("NYNNN") || paymentflag.equals("YYNNN") || paymentflag.equals("YYYYY"))
+{
+	RAP="Y"
+}
+if(paymentflag.equals("YYNNN") || paymentflag.equals("YYYYY"))
+{
+	SAP="Y"
+}
+if(paymentflag.equals("YYYYY"))
+{
+	CMM="Y"
+	M24="N"
+	CQM="N"
+}
+
+int i = Integer.parseInt(context.expand( '${#TestCase#PaymentNumber}' ))
+
+if(i==1)
+{
+	if(RAP=="Y")
+	{
+		testRunner.testCase.setPropertyValue('payment','RAP');
+		i = i+1;
+		testRunner.testCase.setPropertyValue( 'PaymentNumber',  new Integer(i).toString())
+		log.info(ID+";"+i+"RAP")
+	}
+	else 
+	{
+		log.info("Skip Payment RAP")
+		i = i+1;
+		testRunner.testCase.setPropertyValue('PaymentNumber','1')
+		log.info(ID+";"+i+"RAP")
+	}
+}
+else if(i==2)
+{
+	if(SAP=="Y")
+	{
+		testRunner.testCase.setPropertyValue('payment','SAP');
+		i = i+1;
+		testRunner.testCase.setPropertyValue('PaymentNumber',new Integer(i).toString())
+		log.info(ID+";"+i+"SAP")
+	}
+	else
+	{
+		log.info("Skip Payment SAP")
+		i = i+1;
+		testRunner.testCase.setPropertyValue('PaymentNumber',new Integer(i).toString())
+		log.info(ID+";"+i+"SAP")
+		testRunner.gotoStepByName("Payment");
+	}
+}
+else if(i==3)
+{
+	if(CMM=="Y")
+	{
+		testRunner.testCase.setPropertyValue('payment','CMM');
+		i = i+1
+		testRunner.testCase.setPropertyValue('PaymentNumber',new Integer(i).toString())
+		log.info(ID+";"+i+"CMM")
+	}
+	else 
+	{
+		log.info("Skip Payment CMM")
+		testRunner.testCase.setPropertyValue('PaymentNumber','1')
+		log.info(ID+";"+i+"CMM")
+		testRunner.gotoStepByName("DataSource Loop");		
+	}
+}
+else if(i==4)
+{
+	if(CQM=="Y")
+	{
+		testRunner.testCase.setPropertyValue('payment','CQM');
+		i = i+1
+		testRunner.testCase.setPropertyValue('PaymentNumber',new Integer(i).toString())
+		log.info(ID+";"+i+"CQM")
+	}
+	else 
+	{
+		log.info("Skip Payment CQM")
+		testRunner.testCase.setPropertyValue('PaymentNumber','1')
+		log.info(ID+";"+i+"CQM")
+		testRunner.gotoStepByName("DataSource Loop");		
+	}
+}
+else if(i==5)
+{
+	if(M24=="Y")
+	{
+		testRunner.testCase.setPropertyValue('payment','M24');
+		i = i+1
+		testRunner.testCase.setPropertyValue('PaymentNumber',new Integer(i).toString())
+		log.info (ID+";"+i+"M24")
+	}
+	else 
+	{
+		log.info("Skip Payment M24")
+		testRunner.testCase.setPropertyValue('PaymentNumber','1')
+		log.info (ID+";"+i+"M24")
+		testRunner.gotoStepByName("DataSource Loop");		
+	}
+}
+else 
+{	
+	testRunner.testCase.setPropertyValue( 'PaymentNumber', '1')
+	testRunner.gotoStepByName("DataSource Loop");
+}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="OCValidation" id="46895a8b-55a0-4bda-bd1a-0a5aa9d8ca2e">
+    <con:settings/>
+    <con:config>
+      <script>import java.text.DecimalFormat;
+int numOfIterations = Integer.parseInt(context.expand( '${#TestCase#NumOfIterations}' ))
+numOfIterations++
+
+testRunner.testCase.setPropertyValue( 'NumOfIterations',  new Integer(numOfIterations).toString())
+def id = context.expand('${OCRoadAll#ID}')
+log.info (id)
+
+// Check what Products to validate
+String product_Roadside = context.expand( '${OCRoadAll#RO}' );
+String product_Relay = context.expand( '${OCRoadAll#RE}' );
+String product_StayMobile = context.expand( '${OCRoadAll#SM}' );
+String product_HomeStart = context.expand( '${OCRoadAll#HS}' );
+String product_BRC = context.expand( '${OCRoadAll#BRC}' );
+String Offer = context.expand( '${OCRoadAll#OFFER}' );
+String fee_Cancel = context.expand( '${OCRoadAll#C_F}' );
+String fee_WillJoin= context.expand( '${OCRoadAll#W_F}' );
+String agent_Discount = context.expand( '${OCRoadAll#A_D}' );
+def payment = context.expand( '${#TestCase#payment}' ) 
+def productType = context.expand( '${OCRoadAll#PRODUCT_TYPE}' )
+def post = context.expand( '${OCRoadAll#POSTCODE}' )
+
+if(product_Roadside.equals('Y'))
+{
+	String ProdCode = context.expand('${#TestCase#RoadList}');
+	String ProdName = context.expand('${#TestCase#RoadNameList}');
+	func_CheckOffer(payment, "OFFER", ProdName, "RO")	
+}
+
+if(product_Relay.equals('Y'))
+{
+	String ProdCode = context.expand('${#TestCase#RoadList}');
+	String ProdName = "Relay"
+	func_CheckOffer(payment, "OFFER", ProdName, "RE")
+}
+
+if(product_StayMobile.equals('Y'))
+{
+	String ProdCode = context.expand('${#TestCase#RoadList}');
+	String ProdName = "StayMobile"
+	func_CheckOffer(payment, "OFFER", ProdName, "SM")
+}
+if(product_HomeStart.equals('Y'))
+{
+	String ProdCode = context.expand('${#TestCase#RoadList}');
+	String ProdName = "HomeStart"
+	func_CheckOffer(payment, "OFFER", ProdName, "HS")
+}
+if(product_BRC.equals('Y'))
+{
+	String ProdCode = context.expand('${#TestCase#RoadList}');
+	String ProdName = "BRC"
+	func_CheckOffer(payment, "OFFER", ProdName, "BRC")
+}
+
+
+testRunner.gotoStepByName("Payment");
+
+
+def func_CheckOffer(payment,element,name,syntax)
+{
+	log.info(payment+"," + element +"," + name+","  +syntax)
+	Float ProductTotal
+	Float R_Total=Float.parseFloat(context.expand( '${OCNB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:TotalLessDiscounts[1]}' ))
+	Float R_ProductTotal=Float.parseFloat(context.expand( '${OCNB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:Total[1]}' ))
+	def OfferType=context.expand( '${OCRoadAll#' + payment + ',' + syntax +  ',TYPE}' )
+	Float OfferAmount=Float.parseFloat(context.expand( '${OCRoadAll#' + payment + ',' + syntax +  ',AMOUNT}' ))
+	//log.info(OfferType + OfferAmount)	
+	if (OfferType == "T")
+	{
+		ProductTotal = OfferAmount
+	}
+	else
+		if (OfferType == "P")
+		{
+			
+			if (OfferAmount == "0" )
+			{
+				ProductTotal = R_Total
+				
+			}
+			else
+			{
+				ProductTotal = (R_Total - (R_Total*OfferAmount/100)).round(2)
+				
+			}
+		}
+		else
+			if (OfferType == "M")
+			{
+				ProductTotal = (R_Total - OfferAmount).round(2)
+			}
+			
+	//log.info(ProductTotal  + "|" + R_ProductTotal)
+	
+	int totalOfValuesChecked = Integer.parseInt(context.expand( '${#TestCase#TotalOfValuesChecked}' ))
+ 	int NumOfValuesFailed = Integer.parseInt(context.expand( '${#TestCase#NumOfValuesFailed}' ))
+	if (context.expand('${OCRoadAll#BRC}') == "Y")
+	{
+		Car1 = context.expand( '${OCRoadAll#Car_1}' )
+		Car2 = context.expand( '${OCRoadAll#Car_2}' )
+		Car3 = context.expand( '${OCRoadAll#Car_3}' )
+		Car4 = context.expand( '${OCRoadAll#Car_4}' )
+		if (context.expand('${OCRoadAll#Car_4}' ) != "")
+		{
+			product_type = context.expand('${OCRoadAll#PRODUCT_TYPE}' )+ ",BRC" + "(" + "Car1:" + Car1 + ",Car2:" + Car2 + ",Car3:" + Car3 + ",Car4:" + Car4 + ")"
+		}
+		else if (context.expand('${OCRoadAll#Car_3}' ) != "")
+		{
+			product_type = context.expand('${OCRoadAll#PRODUCT_TYPE}' )+ ",BRC" + "(" + "Car1:" + Car1 + ",Car2:" + Car2 + ",Car3:" + Car3 + ")"
+		}
+		else if (context.expand('${OCRoadAll#Car_2}' ) != "")
+		{
+			product_type = context.expand('${OCRoadAll#PRODUCT_TYPE}' )+ ",BRC" + "("  + "Car1:" + Car1 + ",Car2:" + Car2 + ")"
+		}
+		else
+		{
+			product_type = context.expand('${OCRoadAll#PRODUCT_TYPE}' )+ ",BRC" + "(" + "Car1:" + Car1 + ")"
+		}
+	}
+	else
+	{
+		product_type = context.expand( '${OCRoadAll#PRODUCT_TYPE}' )
+	}
+
+	if (name == "BasicBreakdown" || name == "LocalDriver" ||  name == "ROCO" || name ==  "ROPOV" || name == "Standby" ||  name == "StartUp" )
+	{
+		 name= "Roadside"
+	}
+
+	if ( ProductTotal == R_ProductTotal || (ProductTotal - R_ProductTotal).round(2) == 0.01 || (ProductTotal - R_ProductTotal).round(2) == -0.01)
+	{
+		log.info line=(context.expand('${OCRoadAll#ID}') + "|" + context.expand( '${OCRoadAll#OFFER_CODE}' ) + "|"  + payment + "|" + product_type + "|" + context.expand( '${OCRoadAll#COVER}' ) + "|" + name + "|" +ProductTotal  + "| " + R_ProductTotal + "| " +"matches" )
+		BufferedWriter bw = new BufferedWriter (new FileWriter (context.expand('${#TestCase#File}'), true));
+		bw.write (line);
+		bw.newLine();
+		bw.flush();
+		bw.close();
+		totalOfValuesChecked++
+		testRunner.testCase.setPropertyValue( 'totalOfValuesChecked',  new Integer(totalOfValuesChecked).toString())
+	}
+	else 
+	{
+		log.info line2=(context.expand('${OCRoadAll#ID}') + "|" + context.expand( '${OCRoadAll#OFFER_CODE}' ) + "|"  + payment + "|" + product_type + "|" + context.expand( '${OCRoadAll#COVER}' ) + "|" + name + "|" +ProductTotal  + "| " + R_ProductTotal + "| " +"does not matches" )
+		BufferedWriter bw = new BufferedWriter (new FileWriter (context.expand('${#TestCase#FileFailed}'), true));
+		bw.write (line2);
+		bw.newLine();
+		bw.flush();
+		bw.close();
+		totalOfValuesChecked++
+		NumOfValuesFailed++
+		testRunner.testCase.setPropertyValue( 'totalOfValuesChecked',  new Integer(totalOfValuesChecked).toString())
+	}
+	
+	
+
+
+	
+}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasourceloop" name="OCDataSource Loop" id="26987b0a-6af9-4e8e-a66c-3195aecf36a7">
+    <con:settings/>
+    <con:config>
+      <dataSourceStep>OCRoadAll</dataSourceStep>
+      <targetStep>OCSetup_ProductList_XML</targetStep>
+      <discardResults>true</discardResults>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="OCLog_Results" id="b34b408f-dec9-4f14-984d-d83719d02b82">
+    <con:settings/>
+    <con:config>
+      <script>log.info("    ********************************")
+log.info("    ************RESULTS*************")
+log.info("    Number of Iterations: " + context.expand( '${#TestCase#NumOfIterations}' ))
+log.info("    Number of Values Checked: " + context.expand( '${#TestCase#TotalOfValuesChecked}' ))
+log.info("    Number of Failed values: " + context.expand( '${#TestCase#NumOfValuesFailed}' ))
+log.info("    Request Date Time: " + context.expand( '${#TestCase#RequestDateTime}' ))
+log.info("    ********************************")
+log.info("    ********************************")
+
+NumberofIterations = ("    Number of Iterations: " + context.expand( '${#TestCase#NumOfIterations}'));
+NumberofValuesChecked = ("    Number of Values Checked: " + context.expand( '${#TestCase#TotalOfValuesChecked}' ));
+NumberofFailedValues = ("    Number of Failed values: " + context.expand( '${#TestCase#NumOfValuesFailed}' ));
+RequestDateTime = ("    RequestDateTime: " + context.expand( '${#TestCase#RequestDateTime}' ));
+
+BufferedWriter bw = new BufferedWriter (new FileWriter (context.expand('${#TestCase#File}'), true));
+bw.write (NumberofIterations);
+bw.newLine();
+bw.write (NumberofValuesChecked);
+bw.newLine();
+bw.write (NumberofFailedValues);
+bw.newLine();
+bw.write (RequestDateTime);
+bw.newLine();
+bw.flush();
+bw.close();</script>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>TotalOfValuesChecked</con:name>
+      <con:value>370</con:value>
+    </con:property>
+    <con:property>
+      <con:name>NumOfValuesFailed</con:name>
+      <con:value>0</con:value>
+    </con:property>
+    <con:property>
+      <con:name>NumOfIterations</con:name>
+      <con:value>74</con:value>
+    </con:property>
+    <con:property>
+      <con:name>PaymentNumber</con:name>
+      <con:value>1</con:value>
+    </con:property>
+    <con:property>
+      <con:name>RequestDateTime</con:name>
+      <con:value>2020-07-10T00:00:01</con:value>
+    </con:property>
+    <con:property>
+      <con:name>PolicyStartDateTime</con:name>
+      <con:value>2020-07-10T00:00:01</con:value>
+    </con:property>
+    <con:property>
+      <con:name>PolicyEndDateTime</con:name>
+      <con:value>2021-07-09T00:00:01</con:value>
+    </con:property>
+    <con:property>
+      <con:name>TaxDateTime</con:name>
+      <con:value>2020-07-10T00:00:01</con:value>
+    </con:property>
+    <con:property>
+      <con:name>PriceDate</con:name>
+      <con:value>2020-07-10T00:00:01</con:value>
+    </con:property>
+    <con:property>
+      <con:name>FeesDate</con:name>
+      <con:value>2020-07-10T00:00:01</con:value>
+    </con:property>
+    <con:property>
+      <con:name>File</con:name>
+      <con:value>N:/Systems_development/RIO/Road Renewals/Soap UI/Test Results/NBE2E/OfferCodeCheck20200107T160201.txt</con:value>
+    </con:property>
+    <con:property>
+      <con:name>FileFailed</con:name>
+      <con:value>N:/Systems_development/RIO/Road Renewals/Soap UI/Test Results/NBE2E/OfferCodeCheckFailed20200107T160201.txt</con:value>
+    </con:property>
+    <con:property>
+      <con:name>ProductList_XML</con:name>
+      <con:value><![CDATA[<gen:Product><prod:ProductCode>PRD_UK_0001</prod:ProductCode></gen:Product><gen:Product><prod:ProductCode>PRD_UK_0003</prod:ProductCode></gen:Product><gen:Product><prod:ProductCode>PRD_UK_0004</prod:ProductCode></gen:Product><gen:Product><prod:ProductCode>PRD_UK_0005</prod:ProductCode></gen:Product><gen:Product><prod:ProductCode>PRD_UK_0009</prod:ProductCode></gen:Product>]]></con:value>
+    </con:property>
+    <con:property>
+      <con:name>RoadList</con:name>
+      <con:value>PRD_UK_0001</con:value>
+    </con:property>
+    <con:property>
+      <con:name>RoadNameList</con:name>
+      <con:value>Roadside</con:value>
+    </con:property>
+    <con:property>
+      <con:name>TaxType</con:name>
+      <con:value>I</con:value>
+    </con:property>
+    <con:property>
+      <con:name>BRCList_XML</con:name>
+      <con:value>&lt;gen:VehicleAgeList>&lt;gen:VehicleAge>0&lt;/gen:VehicleAge>&lt;/gen:VehicleAgeList></con:value>
+    </con:property>
+    <con:property>
+      <con:name>Cover</con:name>
+      <con:value>1</con:value>
+    </con:property>
+    <con:property>
+      <con:name>ID</con:name>
+      <con:value>72</con:value>
+    </con:property>
+    <con:property>
+      <con:name>payment</con:name>
+      <con:value>SAP</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

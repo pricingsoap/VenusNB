@@ -1,0 +1,1897 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase id="745230e6-d18b-42c2-86d3-3a28a4c443a4" discardOkResults="true" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="242 NB E2E Testing" searchProperties="true" timeout="0" xmlns:con="http://eviware.com/soapui/config">
+  <con:settings>
+    <con:setting id="6fc9dd50-8f58-46cf-a67a-440ccb44e9c9fileName">From-RN---price</con:setting>
+    <con:setting id="d01129f7-ec49-4a9d-a340-13d6b51b20d3fileName">242-NB-E2E-Testing</con:setting>
+    <con:setting id="57a202f9-0e16-41b3-b050-ec7fcd4be4c5fileName">242-NB-E2E-Testing</con:setting>
+    <con:setting id="745230e6-d18b-42c2-86d3-3a28a4c443a4fileName">242-NB-E2E-Testing</con:setting>
+  </con:settings>
+  <con:savedRecentRuns>1</con:savedRecentRuns>
+  <con:testStep type="groovy" name="Initialise_Properties" id="9d4441b9-dfdd-4831-8ecc-2567837ce3ee">
+    <con:settings/>
+    <con:config>
+      <script>// initialise values
+testRunner.testCase.setPropertyValue( 'TotalOfValuesChecked',  '0')
+testRunner.testCase.setPropertyValue( 'NumOfValuesFailed',  '0')
+testRunner.testCase.setPropertyValue( 'NumOfIterations',  '0')
+testRunner.testCase.setPropertyValue( 'PaymentNumber', '1')
+
+////Feb Prices
+//testRunner.testCase.setPropertyValue('RequestDateTime','2019-09-26T07:30:00')
+//testRunner.testCase.setPropertyValue('PolicyStartDateTime','2019-09-26T07:30:00')
+//testRunner.testCase.setPropertyValue('PolicyEndDateTime','2020-09-26T07:30:00')
+//testRunner.testCase.setPropertyValue('TaxDateTime','2019-09-26T07:30:00')
+//testRunner.testCase.setPropertyValue('PriceDate','2019-09-26T07:30:00')
+//testRunner.testCase.setPropertyValue('FeesDate','2019-09-26T07:30:00')
+
+//Dec Prices
+testRunner.testCase.setPropertyValue('RequestDateTime','2020-07-10T00:00:01')
+testRunner.testCase.setPropertyValue('PolicyStartDateTime','2020-07-10T00:00:01')
+testRunner.testCase.setPropertyValue('PolicyEndDateTime','2021-07-09T23:59:59')
+testRunner.testCase.setPropertyValue('TaxDateTime','2020-07-10T00:00:01')
+testRunner.testCase.setPropertyValue('PriceDate','2020-07-10T00:00:01')
+testRunner.testCase.setPropertyValue('FeesDate','2020-07-10T00:00:01')
+
+//Creates output file
+now=new java.text.SimpleDateFormat("yyyyMMdd'T'HHmmss").format(new Date())
+
+testRunner.testCase.setPropertyValue( 'File',("N:/Systems_development/RIO/Road Renewals/Soap UI/Test Results/NBE2E/NBE2EResults" + now + ".txt"));
+//testRunner.testCase.setPropertyValue( 'FileFailed',("N:/Systems_development/RIO/Road Renewals/Soap UI/Test Results/NBE2E/OfferCodeCheckFailed" + now + ".txt"));
+
+FileOutputStream out = new FileOutputStream(context.expand( '${#TestCase#File}' ));
+out.write();
+out.close();
+
+/*FileOutputStream out1 = new FileOutputStream(context.expand( '${#TestCase#FileFailed}' ));
+out1.write();
+out1.close();*/
+
+//write headings for the file
+firstRow="TestCase Number|Offer Code/Fee|Payment Type|Product Mix|CoverType||Price Component|Match or not|Expected value|Actual value|Difference| Difference Amount"
+BufferedWriter bw = new BufferedWriter (new FileWriter (context.expand('${#TestCase#File}'), true));
+bw.write (firstRow);
+bw.newLine();
+bw.flush();
+bw.close();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasource" name="242RoadAll" id="ed8e13ef-5719-4281-83dd-06206c6bebc4">
+    <con:settings/>
+    <con:config xsi:type="con:DataSourceStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:dataSource type="Excel">
+        <con:configuration>
+          <file>N:/Road Pricing/00 - NEW FILING STRUCTURE/Testing Team Data/Pricing Service Testing/Testing areas/New business/Offers/10-07-20/Input For SOAP 10072020.xlsx</file>
+          <worksheet>SOAP</worksheet>
+          <cell>A2</cell>
+          <ignoreEmpty>true</ignoreEmpty>
+          <evaluateFormulas>false</evaluateFormulas>
+        </con:configuration>
+      </con:dataSource>
+      <con:shared>false</con:shared>
+      <con:restartShared>false</con:restartShared>
+      <con:property>ID</con:property>
+      <con:property>OFFER_CODE</con:property>
+      <con:property>MAN_CON</con:property>
+      <con:property>POSTCODE</con:property>
+      <con:property>PRODUCT_TYPE</con:property>
+      <con:property>COVER</con:property>
+      <con:property>RO</con:property>
+      <con:property>RE</con:property>
+      <con:property>HS</con:property>
+      <con:property>SM</con:property>
+      <con:property>BRC</con:property>
+      <con:property>OFFER</con:property>
+      <con:property>A_D</con:property>
+      <con:property>Car_1</con:property>
+      <con:property>Car_2</con:property>
+      <con:property>Car_3</con:property>
+      <con:property>Car_4</con:property>
+      <con:property>Core SAP AQRP</con:property>
+      <con:property>Core RAP AQRP</con:property>
+      <con:property>Core CMM AQRP</con:property>
+      <con:property>BRC SAP AQRP</con:property>
+      <con:property>BRC RAP AQRP</con:property>
+      <con:property>BRC CMM AQRP</con:property>
+      <con:property>Niche SAP AQRP</con:property>
+      <con:property>Niche RAP AQRP</con:property>
+      <con:property>Niche CMM AQRP</con:property>
+      <con:property>PaymentType</con:property>
+      <con:property>SAP,RO,TYPE</con:property>
+      <con:property>SAP,RO,AMOUNT</con:property>
+      <con:property>SAP,RE,TYPE</con:property>
+      <con:property>SAP,RE,AMOUNT</con:property>
+      <con:property>SAP,HS,TYPE</con:property>
+      <con:property>SAP,HS,AMOUNT</con:property>
+      <con:property>SAP,SM,TYPE</con:property>
+      <con:property>SAP,SM,AMOUNT</con:property>
+      <con:property>SAP,BRC,TYPE</con:property>
+      <con:property>SAP,BRC,AMOUNT</con:property>
+      <con:property>RAP,RO,TYPE</con:property>
+      <con:property>RAP,RO,AMOUNT</con:property>
+      <con:property>RAP,RE,TYPE</con:property>
+      <con:property>RAP,RE,AMOUNT</con:property>
+      <con:property>RAP,HS,TYPE</con:property>
+      <con:property>RAP,HS,AMOUNT</con:property>
+      <con:property>RAP,SM,TYPE</con:property>
+      <con:property>RAP,SM,AMOUNT</con:property>
+      <con:property>RAP,BRC,TYPE</con:property>
+      <con:property>RAP,BRC,AMOUNT</con:property>
+      <con:property>CMM,RO,TYPE</con:property>
+      <con:property>CMM,RO,AMOUNT</con:property>
+      <con:property>CMM,RE,TYPE</con:property>
+      <con:property>CMM,RE,AMOUNT</con:property>
+      <con:property>CMM,HS,TYPE</con:property>
+      <con:property>CMM,HS,AMOUNT</con:property>
+      <con:property>CMM,SM,TYPE</con:property>
+      <con:property>CMM,SM,AMOUNT</con:property>
+      <con:property>CMM,BRC,TYPE</con:property>
+      <con:property>CMM,BRC,AMOUNT</con:property>
+      <con:property>M24,RO,TYPE</con:property>
+      <con:property>M24,RO,AMOUNT</con:property>
+      <con:property>M24,RE,TYPE</con:property>
+      <con:property>M24,RE,AMOUNT</con:property>
+      <con:property>M24,HS,TYPE</con:property>
+      <con:property>M24,HS,AMOUNT</con:property>
+      <con:property>M24,SM,TYPE</con:property>
+      <con:property>M24,SM,AMOUNT</con:property>
+      <con:property>M24,BRC,TYPE</con:property>
+      <con:property>M24,BRC,AMOUNT</con:property>
+      <con:property>CQM,RO,TYPE</con:property>
+      <con:property>CQM,RO,AMOUNT</con:property>
+      <con:property>CQM,RE,TYPE</con:property>
+      <con:property>CQM,RE,AMOUNT</con:property>
+      <con:property>CQM,HS,TYPE</con:property>
+      <con:property>CQM,HS,AMOUNT</con:property>
+      <con:property>CQM,SM,TYPE</con:property>
+      <con:property>CQM,SM,AMOUNT</con:property>
+      <con:property>CQM,BRC,TYPE</con:property>
+      <con:property>CQM,BRC,AMOUNT</con:property>
+      <con:startRow>355</con:startRow>
+      <con:endRow>425</con:endRow>
+      <con:recordsPerIteration>1</con:recordsPerIteration>
+      <con:completeLastOperation>true</con:completeLastOperation>
+      <con:trimValues>false</con:trimValues>
+      <con:entitizeValues>false</con:entitizeValues>
+      <con:restartOnRun>true</con:restartOnRun>
+      <con:expandProperties>false</con:expandProperties>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="Groovy Script" id="d273beec-5edf-4849-939a-fb3666f081d4" disabled="true">
+    <con:settings/>
+    <con:config>
+      <script>def project = testRunner.testCase.testSuite.project;
+
+testRunner.testCase.setPropertyValue('payment','RAP')
+testRunner.runTestStep( project.testSuites['Venus_NB_Suite'].testCases['242 NB E2E Testing'].testSteps['Setup_ProductList_XML'] )
+testRunner.runTestStep( project.testSuites['Venus_NB_Suite'].testCases['242 NB E2E Testing'].testSteps['Setup_Cover_Value'] )
+//testRunner.runTestStep( project.testSuites['242EndtoEndPrice'].testCases['242NB E2E Testing'].testSteps['Calculate Tax%'] )
+testRunner.runTestStep( project.testSuites['Venus_NB_Suite'].testCases['242 NB E2E Testing'].testSteps['Setup_Flex'] )
+testRunner.runTestStep( project.testSuites['Venus_NB_Suite'].testCases['242 NB E2E Testing'].testSteps['Call'] )
+testRunner.runTestStep( project.testSuites['Venus_NB_Suite'].testCases['242 NB E2E Testing'].testSteps['242NB Request'] )
+log.info("---------------------------------------------------------------------------------------------VALIDATION---------------------------------------------------------------------------------------------")
+//testRunner.runTestStep( project.testSuites['242EndtoEndPrice'].testCases['242 NB E2E Testing'].testSteps['Validation New'] )
+
+//http://esbpreprod:18026/SOAPServiceBinding/BSROS_GenerateQuote_NB/</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="Setup_ProductList_XML" id="0b401144-7429-4755-bff9-1e6b40c1c5b9">
+    <con:settings/>
+    <con:config>
+      <script><![CDATA[def productType = context.expand( '${242RoadAll#PRODUCT_TYPE}' )
+def post = context.expand('${242RoadAll#POSTCODE}')
+def SAPTax = context.expand( '${#TestCase#SAP,Tax}' )
+def id = context.expand('${242RoadAll#ID}')
+log.info (id)
+String delimiters = "\\,|\\&";
+String[] prodArr = productType.split(delimiters);
+StringBuilder strBld = new StringBuilder();
+StringBuilder strBld2 = new StringBuilder();
+StringBuilder strBld3 = new StringBuilder();
+
+if(prodArr.length > 0)
+{
+	for (prod in prodArr)
+	{
+		strBld.append("<gen:Product>");
+		strBld.append("<prod:ProductCode>");
+		if(prod.trim().equals("Roadside"))
+		{
+			if(post.equals("JE2 3RP")||post.equals("IM99 3EP"))
+			{
+				strBld.append("PRD_UK_0014");
+				strBld2.append("PRD_UK_0014");
+				strBld3.append("Roadside");
+			}
+			else
+			{
+				strBld.append("PRD_UK_0001");
+				strBld2.append("PRD_UK_0001");
+				strBld3.append("Roadside");
+			}
+		}
+		if(prod.trim().equals("Basic Breakdown Cover"))
+		{
+			strBld.append("PRD_UK_0020");
+			strBld2.append("PRD_UK_0020");
+			strBld3.append("BasicBreakdown");
+		}
+		if(prod.trim().equals("ROCO"))
+		{
+			strBld.append("PRD_UK_0021");
+			strBld2.append("PRD_UK_0021");
+			strBld3.append("ROCO");
+		}
+		if(prod.trim().equals("ROPOV"))
+		{
+			strBld.append("PRD_UK_0023");
+			strBld2.append("PRD_UK_0023");
+			strBld3.append("ROPOV");
+		}
+		if(prod.trim().equals("Local Driver"))
+		{
+			strBld.append("PRD_UK_0022");			
+			strBld2.append("PRD_UK_0022");
+			strBld3.append("LocalDriver");
+		}
+		if(prod.trim().equals("Standby"))
+		{
+			strBld.append("PRD_UK_0030");
+			strBld2.append("PRD_UK_0030");
+			strBld3.append("Standby");
+		}
+		if(prod.trim().equals("Start Up"))
+		{
+			strBld.append("PRD_UK_0024");
+			strBld2.append("PRD_UK_0024");
+			strBld3.append("StartUp");
+		}
+		if(prod.trim().equals("Home Start"))
+		{
+			strBld.append("PRD_UK_0003");
+		}
+		if(prod.trim().equals("Relay"))
+		{
+			if(post.equals("JE2 3RP")||post.equals("IM99 3EP"))
+			{
+				strBld.append("PRD_UK_0015");	
+			}
+			else
+			{
+				strBld.append("PRD_UK_0004");
+			}
+		}
+		if(prod.trim().equals("Stay Mobile"))
+		{
+			if(post.equals("JE2 3RP")||post.equals("IM99 3EP"))
+			{
+				strBld.append("PRD_UK_0016");	
+			}
+			else
+			{
+				strBld.append("PRD_UK_0005");
+			}
+		}		
+		strBld.append("</prod:ProductCode>");
+		strBld.append("</gen:Product>");
+	}
+	if (context.expand('${242RoadAll#BRC}').equals("Y"))
+	{
+		strBld.append("<gen:Product><prod:ProductCode>PRD_UK_0009</prod:ProductCode></gen:Product>");
+	}
+}
+taxtype="I";
+testRunner.testCase.setPropertyValue( "ProductList_XML",  strBld.toString()) //sends nodes in Request
+testRunner.testCase.setPropertyValue( "RoadList",  strBld2.toString()) //sets ROADSIDE string in Validation
+testRunner.testCase.setPropertyValue( "RoadNameList",  strBld3.toString()) //sets NAME string in Validation
+testRunner.testCase.setPropertyValue( "TaxType",  taxtype.toString())
+log.info(strBld)
+log.info(strBld2)
+log.info(strBld3)]]></script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="Setup_Cover_Value" id="459e8e8a-6df9-4272-b265-e0a549eaec0a">
+    <con:settings/>
+    <con:config>
+      <script>def cover = context.expand( '${242RoadAll#COVER}' )
+String coverToUse = "";
+
+if(cover.equals("V1"))
+{
+	coverToUse = "0";
+}
+if(cover.equals("P1"))
+{
+	coverToUse = "1";
+}
+if(cover.equals("P2"))
+{
+	coverToUse = "2";
+}
+if(cover.equals("P3"))
+{
+	coverToUse = "3";
+}
+if(cover.equals("P4"))
+{
+	coverToUse = "4";
+}
+
+testRunner.testCase.setPropertyValue( "Cover",  coverToUse)
+log.info(coverToUse)</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="Setup_Flex" id="d5825ada-429e-4b16-89e2-799ecaa42760" disabled="true">
+    <con:settings/>
+    <con:config>
+      <script>StringBuilder strBld = new StringBuilder();
+
+if(context.expand( '${242RoadAll#RiskInd}' ) == "Risk")
+{
+	strBld.append("true")
+}
+else
+{
+	strBld.append("false")
+}
+
+log.info(strBld)
+testRunner.testCase.setPropertyValue("FlexFlag", strBld.toString())</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="Call" id="447cbcf9-4bd5-4a62-9d34-39ca7c202835" disabled="true">
+    <con:settings/>
+    <con:config>
+      <script>//Only Call the required Scripts
+
+def project = testRunner.testCase.testSuite.project;
+def BRC = context.expand('${242RoadAll#BRC}')
+def Fees1 = context.expand('${242RoadAll#C_F}')
+def Fees2 = context.expand('${242RoadAll#W_F}')
+log.info Fees1
+log.info Fees2
+
+Float AD = Float.parseFloat(context.expand('${242RoadAll#A_D}'))
+//BRC
+if (BRC.equals("Y"))
+{
+	testRunner.runTestStep( project.testSuites['New242E2EPrice'].testCases['242 NB E2E Testing'].testSteps['Setup_BRCList_XML'] );
+}
+else
+{
+	empty="";
+	testRunner.testCase.setPropertyValue( "BRCList_XML",  empty.toString());
+}
+//Fees
+if (Fees1.equals("Y") || Fees2.equals("Y"))
+{
+	testRunner.runTestStep( project.testSuites['New242E2EPrice'].testCases['242 NB E2E Testing'].testSteps['Setup_FeesList_XML'] );
+}
+else
+{
+	empty="";
+	testRunner.testCase.setPropertyValue( "FeeList_XML",  empty.toString());
+}
+
+//Agent Discount
+if(AD > 0)
+{
+	testRunner.runTestStep( project.testSuites['New242E2EPrice'].testCases['242 NB E2E Testing'].testSteps['Setup_AgentDiscount_XML'] );
+}
+else
+{
+	empty="";
+	testRunner.testCase.setPropertyValue( "AgentDiscount_XML",  empty.toString())
+}
+
+testRunner.gotoStepByName("RetrieveRoadQuote");</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="Setup_BRCList_XML" id="ace5f0c1-984f-42c9-b5d1-2d87418ccea0">
+    <con:settings/>
+    <con:config>
+      <script><![CDATA[def car1 = context.expand( '${242RoadAll#Car_1}' )
+def car2 = context.expand( '${242RoadAll#Car_2}' )
+def car3 = context.expand( '${242RoadAll#Car_3}' )
+def car4 = context.expand( '${242RoadAll#Car_4}' )
+
+StringBuilder strBld = new StringBuilder();
+
+strBld.append("<gen:VehicleAgeList>")
+
+strBld.append("<gen:VehicleAge>");
+strBld.append(car1);
+strBld.append("</gen:VehicleAge>");
+
+	if(!(car2.isEmpty()||car2.equals("-")))
+	{
+		strBld.append("<gen:VehicleAge>");
+		strBld.append(car2);
+		strBld.append("</gen:VehicleAge>");
+	}
+	if(!(car3.isEmpty()||car3.equals("-")))
+	{
+		strBld.append("<gen:VehicleAge>");
+		strBld.append(car3);
+		strBld.append("</gen:VehicleAge>");
+	}
+	if(!(car4.isEmpty()||car4.equals("-")))
+	{
+		strBld.append("<gen:VehicleAge>");
+		strBld.append(car4);
+		strBld.append("</gen:VehicleAge>");
+	}		
+
+strBld.append("</gen:VehicleAgeList>");
+def brc = context.expand( '${242RoadAll#BRC}' )
+if (brc=="Y")
+{
+	testRunner.testCase.setPropertyValue( "BRCList_XML",  strBld.toString())	
+}
+else
+{
+	def empty = ""
+	testRunner.testCase.setPropertyValue( "BRCList_XML",  empty.toString())
+}
+log.info(context.expand( '${#TestCase#BRCList_XML}' ))]]></script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="Setup_FeesList_XML" id="a5e97342-93c2-4e2a-a521-ed43e2f7ed5a">
+    <con:settings/>
+    <con:config>
+      <script><![CDATA[StringBuilder strBld = new StringBuilder();
+def cancel_waived = context.expand( '${242RoadAll#CANCEL_WAIVED}' )
+def cancel_reason = context.expand( '${242RoadAll#CANCEL_WAIVED_REASON}' )
+def willjoin_waived = context.expand( '${242RoadAll#WILLJOIN_WAIVED}' )
+def willjoin_reason = context.expand( '${242RoadAll#WILLJOIN_WAIVED_REASON}' )
+
+def Fees1 = context.expand('${242RoadAll#C_F}')
+def Fees2 = context.expand('${242RoadAll#W_F}')
+//if (Fees1.equals("Y") || Fees2.equals("Y"))
+//{
+
+strBld.append("<prod:RequestSurchargeAndFeeList>");
+if(context.expand('${242RoadAll#CANCEL_FEE_CODE}').trim().equals("Cancellation1")||context.expand('${242RoadAll#CANCEL_FEE_CODE}').trim().equals("Cancellation2")||context.expand('${242RoadAll#CANCEL_FEE_CODE}').trim().equals("WillJoinCanx"))
+{
+	if(context.expand('${242RoadAll#CANCEL_FEE_CODE}').trim().equals("Cancellation1"))
+	{
+		fee2="Cancellation1";
+		def group = 'RO_CANXL_01';
+		if(cancel_waived.equals("true"))
+		{
+			waive = "true"
+		}
+		if(!(cancel_waived.equals("true")))
+		{
+			waive = "false"
+		}
+		func_Fee(strBld, fee2, waive, cancel_reason)
+	}
+	if(context.expand('${242RoadAll#CANCEL_FEE_CODE}').trim().equals("Cancellation2"))
+	{
+		fee2="Cancellation2";
+		def group = 'RO_CANXL_01';
+		if(cancel_waived.equals("true"))
+		{
+			waive = "true"
+		}
+		if(!(cancel_waived.equals("true")))
+		{
+			waive = "false"
+		}
+		func_Fee(strBld, fee2, waive, cancel_reason)
+	}
+	if(context.expand('${242RoadAll#CANCEL_FEE_CODE}').trim().equals("WillJoinCanx"))
+	{
+		fee2="WillJoinCanx";
+		def group = 'RO_WJCNX_01';
+		if(cancel_waived.equals("true"))
+		{
+			waive = "true"
+		}
+		if(!(cancel_waived.equals("true")))
+		{
+			waive = "false"
+		}
+		log.info(waive + "|" + fee2)
+		func_Fee( strBld, fee2, waive, cancel_reason )
+	}
+	testRunner.testCase.setPropertyValue( "FeeCancel",  fee2.toString() );
+}
+if(context.expand('${242RoadAll#WILLJOIN_FEE_CODE}').trim().equals("WJ_BB")||context.expand('${242RoadAll#WILLJOIN_FEE_CODE}').trim().equals("WJ_NB"))
+{
+	if(context.expand('${242RoadAll#WILLJOIN_FEE_CODE}').trim().equals("WJ_BB"))
+	{	
+		fee2="WJ_BB";
+		def group = 'RO_WJOIN_01';
+		if(willjoin_waived.equals("true"))
+		{
+			waive = "true"
+		}
+		if(!(willjoin_waived.equals("true")))
+		{
+			waive = "false"
+		}
+		func_Fee(strBld, fee2, waive, willjoin_reason)
+	}
+
+	if(context.expand('${242RoadAll#WILLJOIN_FEE_CODE}').trim().equals("WJ_NB"))
+	{
+		fee2="WJ_NB";
+		def group = 'RO_WJOIN_01';
+		if(willjoin_waived.equals("true"))
+		{
+			waive = "true"
+		}
+		if(!(willjoin_waived.equals("true")))
+		{
+			waive = "false"
+		}
+		func_Fee( strBld, fee2, waive, willjoin_reason)
+	}
+	testRunner.testCase.setPropertyValue( "FeeWillJoin",  fee2.toString() );
+}
+strBld.append("</prod:RequestSurchargeAndFeeList>");
+//}
+//else
+//{
+//	strBld.append("")
+//}
+
+def func_Fee( strBld, fee2, waive, reason )
+{        
+	strBld.append("<prod:SurchargeOrFee>")
+	strBld.append("<prod:SurchargeRequestType>R</prod:SurchargeRequestType>") 
+	strBld.append("<prod:IsWaived>" + waive + "</prod:IsWaived>")
+	strBld.append("<prod:WaivedReason>" + reason + "</prod:WaivedReason>")
+	strBld.append("<prod:SurchargeOrFeeCode>" + fee2 + "</prod:SurchargeOrFeeCode>")
+	strBld.append("</prod:SurchargeOrFee>")
+}
+
+testRunner.testCase.setPropertyValue( "FeeList_XML",  strBld.toString());
+log.info(strBld)]]></script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="Setup_AgentDiscount_XML" id="81687239-8a98-44ed-96fb-e300ae08a5fd">
+    <con:settings/>
+    <con:config>
+      <script><![CDATA[def payment = context.expand( '${#TestCase#payment}' ) 
+
+StringBuilder strBld = new StringBuilder();
+StringBuilder strBld2 = new StringBuilder();
+def x 
+//def AgentDiscountValue
+def d = Integer.parseInt(context.expand('${242RoadAll#A_D}')); 
+if (d != 0)
+{
+	strBld.append("<prod:AgentDiscountRequestedList>");
+	for( int i=1 ; i<=d; i++  ) 
+	{
+		if(context.expand('${242RoadAll#AGENT_DISCOUNT_VALUE_' + i + '}') == "")
+		{
+			strBld.append("")
+		}
+		else
+		{
+			def Type = context.expand('${242RoadAll#AGENT_DISCOUNT_TYPE_' + i + '}')
+			
+			AgentDiscountValue = context.expand('${242RoadAll#AGENT_DISCOUNT_VALUE_' + i + '}')
+			log.info(AgentDiscountValue + d )
+			if(payment=="CMM" && (Type == "M" || Type == "T"))
+			{
+				if (AgentDiscountValue == "0")
+				{
+					AgentDiscountValue = 0
+				}	
+				else
+				{
+					AgentDiscountValue = (Float.parseFloat(AgentDiscountValue)/12).round(2)
+				}
+			}
+			else if(payment=="M24" && (Type == "M" || Type == "T"))
+			{
+				if (AgentDiscountValue == "0")
+				{
+					AgentDiscountValue = 0
+				}	
+				else
+				{
+					AgentDiscountValue = (Float.parseFloat(AgentDiscountValue)*2).round(2)
+				}
+			}
+			else if(payment=="CQM" && (Type == "M" || Type == "T"))
+			{
+				if (AgentDiscountValue == "0")
+				{
+					AgentDiscountValue = 0
+				}	
+				else
+				{
+					AgentDiscountValue = (Float.parseFloat(AgentDiscountValue)/4).round(2)
+				}
+			}
+
+			new_code="Abc"+i+"c"
+			strBld.append("<prod:AgentDiscountRequested>");
+			//strBld.append("<prod:AgentDiscountCode>" + context.expand('${242RoadAll#AGENT_DISCOUNT_CODE_' + i + '}') + "</prod:AgentDiscountCode>");
+			strBld.append("<prod:AgentDiscountCode>" + new_code + "</prod:AgentDiscountCode>");
+			strBld.append("<prod:AgentDiscountType>" + context.expand('${242RoadAll#AGENT_DISCOUNT_TYPE_' + i + '}') + "</prod:AgentDiscountType>");
+			strBld.append("<prod:AgentDiscountValue>" + AgentDiscountValue + "</prod:AgentDiscountValue>");
+			strBld.append("</prod:AgentDiscountRequested>");
+			x = i
+		}
+	}
+	strBld.append("</prod:AgentDiscountRequestedList>");  
+}
+//else
+//{
+//	strBld.append("")
+//}
+strBld2.append(x)
+log.info(strBld)
+log.info(strBld2)
+testRunner.testCase.setPropertyValue( "AgentDiscount_XML", strBld.toString())
+testRunner.testCase.setPropertyValue( "AgentDiscountsApplied", strBld2.toString())]]></script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="request" name="242NB Request" id="35aaf0eb-683c-4b83-8c87-4ea7eb07a968">
+    <con:settings/>
+    <con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:interface>SOAPServiceBinding</con:interface>
+      <con:operation>GenerateQuote</con:operation>
+      <con:request name="242NB Request" id="8eaa508a-d729-4c43-8b65-ee3b252b4e14">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://rh0124v:18026/SOAPServiceBinding/BSROS_GenerateQuote_NB/</con:endpoint>
+        <con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:gen="http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2" xmlns:mes="http://www.theaa.com/CommonServices/Data/Message/MessageHeader.2" xmlns:com="http://www.theaa.com/CommonServices/Data/Common" xmlns:prod="http://www.theaa.com/CommonServices/Data/Product.2">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <gen:GenerateQuoteRequest>
+         <mes:RequestHeader>
+            <mes:TransactionId>RO-NB-1611-313</mes:TransactionId>
+            <mes:Version>1.0</mes:Version>
+            <mes:RequestDateTime>${#TestCase#RequestDateTime}</mes:RequestDateTime>
+            <mes:Source>
+               <mes:Domain>SALES</mes:Domain>
+               <mes:Channel>SanityTesting</mes:Channel>
+               <mes:LineOfBusiness>ROS</mes:LineOfBusiness>
+               <mes:Name>Pricing Services</mes:Name>
+               <mes:User>PS Testing</mes:User>
+            </mes:Source>
+         </mes:RequestHeader>
+         <gen:ProductList>
+            <prod:EffectivePriceDateTime>${#TestCase#PriceDate}</prod:EffectivePriceDateTime>
+            <prod:PolicyStartDateTime>${#TestCase#PolicyStartDateTime}</prod:PolicyStartDateTime>
+            <prod:PolicyEndDateTime>${#TestCase#PolicyEndDateTime}</prod:PolicyEndDateTime>
+            <prod:OfferCodeDetailList>
+               <prod:OfferCodeDetail>
+                  <prod:OfferCode>${242RoadAll#OFFER_CODE}</prod:OfferCode>
+                  <prod:OfferCodeApplicationLevel>1</prod:OfferCodeApplicationLevel>
+               </prod:OfferCodeDetail>
+            </prod:OfferCodeDetailList>
+            <prod:SourceGroup>30</prod:SourceGroup>
+            <prod:SourceCode>INS02</prod:SourceCode>
+            <prod:Currency>GBP</prod:Currency>
+            <gen:ManConYear1>false</gen:ManConYear1>
+            ${#TestCase#ProductList_XML}
+            ${#TestCase#BRCList_XML}
+          
+            <gen:CoveredPersons>${#TestCase#Cover}</gen:CoveredPersons>
+<!--            ${#TestCase#AgentDiscount_XML}-->
+         </gen:ProductList>
+         <gen:CustomerDetails>
+            <gen:Postcode>${242RoadAll#POSTCODE}</gen:Postcode>
+         </gen:CustomerDetails>
+      </gen:GenerateQuoteRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request>
+        <con:assertion type="SOAP Response" id="2b731f21-f290-4a01-a4a1-d39e47d7e986"/>
+        <con:credentials>
+          <con:selectedAuthProfile>Inherit From Parent</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:wsaConfig mustUnderstand="NONE" version="200508"/>
+        <con:wsrmConfig version="1.2"/>
+      </con:request>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="Validate_Fees" id="4178f5b4-d952-4f3e-8da8-f5c6ac0ccb78" disabled="true">
+    <con:settings/>
+    <con:config>
+      <script><![CDATA[import java.text.DecimalFormat;
+def payment = context.expand( '${#TestCase#payment}' ) 
+
+// loop for  feecodes
+for (int j =1 ; j<=10; j++)
+{
+
+	def FeeCode = context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[1]/tns1:SurchargeFeeList[1]/tns1:SurchargeFee['+j+']/tns1:Code[1]}' )
+	if (FeeCode == "")
+	{
+		j=10
+		log.info ("No Fees to check")
+	}
+	else
+	{
+		func_CheckFees(FeeCode,payment,j)
+	}
+}
+
+def func_CheckFees(FeeCode,payment,j)
+{
+	def mapSAPFee, mapRAPFee, mapCMMFee, mapSAPFeeTax, mapRAPFeeTax, mapCMMFeeTax, mapSAPFeeW, mapRAPFeeW, mapCMMFeeW, mapSAPFeeTaxW, mapRAPFeeTaxW, mapCMMFeeTaxW
+	Float Fee, FeeTax, TotalFees, FeeDiff, FeeTaxDiff,TaxPC, R_Fee, R_FeeTax, R_TotalFees,  R_TaxPC
+	def R_TaxType
+	def date = context.expand( '${#TestCase#FeesDate}' )
+	def post = context.expand('${242RoadAll#POSTCODE}')
+	int totalOfValuesChecked = Integer.parseInt(context.expand( '${#TestCase#TotalOfValuesChecked}' ))
+	int numOfValuesFailed = Integer.parseInt(context.expand( '${#TestCase#NumOfValuesFailed}' ))
+	log.info(post + FeeCode + payment + j)
+	//Setup Fees List
+	StringBuilder strBld = new StringBuilder();
+	def Code1 = context.expand( '${242RoadAll#CANCEL_FEE_CODE}' )
+	def Code2 = context.expand( '${242RoadAll#WILLJOIN_FEE_CODE}' )
+	def Waived1 = context.expand( '${242RoadAll#CANCEL_WAIVED}' )
+	def Waived2 = context.expand( '${242RoadAll#WILLJOIN_WAIVED}' )
+	def C_F = context.expand( '${242RoadAll#C_F}' )
+	def W_F = context.expand( '${242RoadAll#W_F}' )
+	def mancon = context.expand( '${242RoadAll#MAN_CON}' )
+	
+	totalOfValuesChecked++
+	testRunner.testCase.setPropertyValue( 'totalOfValuesChecked',  new Integer(totalOfValuesChecked).toString())
+		
+	if(post.equals("JE2 3RP"))
+	{
+		log.info("Channel Islands Fees")
+		mapSAPFee = [Cancellation1:20, Cancellation2:6, WillJoinCanx:109, WJ_NB:109, WJ_BB:0]
+		mapRAPFee = [Cancellation1:20, Cancellation2:6, WillJoinCanx:99, WJ_NB:99, WJ_BB:65]
+		mapCMMFee = [Cancellation1:20, Cancellation2:6, WillJoinCanx:99, WJ_NB:99, WJ_BB:0]
+		mapM24Fee = [Cancellation1:20, Cancellation2:6, WillJoinCanx:99, WJ_NB:99, WJ_BB:0]
+		mapCQMFee = [Cancellation1:20, Cancellation2:6, WillJoinCanx:99, WJ_NB:99, WJ_BB:0]
+		mapSAPFeeW = [Cancellation1:-20, Cancellation2:-6, WillJoinCanx:-109, WJ_NB:-109, WJ_BB:0]
+		mapRAPFeeW = [Cancellation1:-20, Cancellation2:-6, WillJoinCanx:-99, WJ_NB:-99, WJ_BB:-65]
+		mapCMMFeeW = [Cancellation1:-20, Cancellation2:-6, WillJoinCanx:-99, WJ_NB:-99, WJ_BB:0]
+		mapM24FeeW = [Cancellation1:-20, Cancellation2:-6, WillJoinCanx:-99, WJ_NB:-99, WJ_BB:0]
+		mapCQMFeeW = [Cancellation1:-20, Cancellation2:-6, WillJoinCanx:-99, WJ_NB:-99, WJ_BB:0]
+		mapSAPFeeTax=[Cancellation1:0, Cancellation2:0, WillJoinCanx:0, WJ_NB:0, WJ_BB:0]
+		mapRAPFeeTax=[Cancellation1:0, Cancellation2:0, WillJoinCanx:0, WJ_NB:0, WJ_BB:0]
+		mapCMMFeeTax=[Cancellation1:0, Cancellation2:0, WillJoinCanx:0, WJ_NB:0, WJ_BB:0]
+		mapM24FeeTax=[Cancellation1:0, Cancellation2:0, WillJoinCanx:0, WJ_NB:0, WJ_BB:0]
+		mapCQMFeeTax=[Cancellation1:0, Cancellation2:0, WillJoinCanx:0, WJ_NB:0, WJ_BB:0]
+		mapSAPFeeTaxW=[Cancellation1:0, Cancellation2:0, WillJoinCanx:0, WJ_NB:0, WJ_BB:0]
+		mapRAPFeeTaxW=[Cancellation1:0, Cancellation2:0, WillJoinCanx:0, WJ_NB:0, WJ_BB:0]
+		mapCMMFeeTaxW=[Cancellation1:0, Cancellation2:0, WillJoinCanx:0, WJ_NB:0, WJ_BB:0]
+		mapM24FeeTaxW=[Cancellation1:0, Cancellation2:0, WillJoinCanx:0, WJ_NB:0, WJ_BB:0]
+		mapCQMFeeTaxW=[Cancellation1:0, Cancellation2:0, WillJoinCanx:0, WJ_NB:0, WJ_BB:0]
+	}
+	else if ( post.equals("IM99 3EP"))
+	{
+		log.info("Isle of Man Fees")
+		mapSAPFee = [Cancellation1:20, Cancellation2:6, WillJoinCanx:90.83, WJ_NB:109, WJ_BB:0]
+		mapRAPFee = [Cancellation1:20, Cancellation2:6, WillJoinCanx:82.5, WJ_NB:99, WJ_BB:65]
+		mapCMMFee = [Cancellation1:20, Cancellation2:6, WillJoinCanx:82.5, WJ_NB:99, WJ_BB:0]
+		mapM24Fee = [Cancellation1:20, Cancellation2:6, WillJoinCanx:82.5, WJ_NB:99, WJ_BB:0]
+		mapCQMFee = [Cancellation1:20, Cancellation2:6, WillJoinCanx:82.5, WJ_NB:99, WJ_BB:0]
+		mapSAPFeeW = [Cancellation1:-20, Cancellation2:-6, WillJoinCanx:-90.83, WJ_NB:-109, WJ_BB:0]
+		mapRAPFeeW = [Cancellation1:-20, Cancellation2:-6, WillJoinCanx:-82.5, WJ_NB:-99, WJ_BB:-65]
+		mapCMMFeeW = [Cancellation1:-20, Cancellation2:0, WillJoinCanx:-82.5, WJ_NB:-99, WJ_BB:0]
+		mapM24FeeW = [Cancellation1:-20, Cancellation2:0, WillJoinCanx:-82.5, WJ_NB:-99, WJ_BB:0]
+		mapCQMFeeW = [Cancellation1:-20, Cancellation2:0, WillJoinCanx:-82.5, WJ_NB:-99, WJ_BB:0]
+		mapSAPFeeTax=[Cancellation1:0, Cancellation2:0, WillJoinCanx:18.17, WJ_NB:0, WJ_BB:0]
+		mapRAPFeeTax=[Cancellation1:0, Cancellation2:0, WillJoinCanx:16.5, WJ_NB:0, WJ_BB:0]
+		mapCMMFeeTax=[Cancellation1:0, Cancellation2:0, WillJoinCanx:16.5, WJ_NB:0, WJ_BB:0]
+		mapM24FeeTax=[Cancellation1:0, Cancellation2:0, WillJoinCanx:16.5, WJ_NB:0, WJ_BB:0]
+		mapCQMFeeTax=[Cancellation1:0, Cancellation2:0, WillJoinCanx:16.5, WJ_NB:0, WJ_BB:0]
+		mapSAPFeeTaxW=[Cancellation1:0, Cancellation2:0, WillJoinCanx:-18.17, WJ_NB:0, WJ_BB:0]
+		mapRAPFeeTaxW=[Cancellation1:0, Cancellation2:0, WillJoinCanx:-16.5, WJ_NB:0, WJ_BB:0]
+		mapCMMFeeTaxW=[Cancellation1:0, Cancellation2:0, WillJoinCanx:-16.5, WJ_NB:0, WJ_BB:0]
+		mapM24FeeTaxW=[Cancellation1:0, Cancellation2:0, WillJoinCanx:-16.5, WJ_NB:0, WJ_BB:0]
+		mapCQMFeeTaxW=[Cancellation1:0, Cancellation2:0, WillJoinCanx:-16.5, WJ_NB:0, WJ_BB:0]
+	}
+	else if(date.equals('2017-10-29T00:00:00') && mancon=="false")
+	{
+		log.info("oct 17 without mancon")
+		mapSAPFee = [Cancellation1:17.86, Cancellation2:5.36, WillJoinCanx:90.83, WJ_NB:97.32, WJ_BB:0, WJ_SG_MTA:43.75, WJ_ML_MTA:88.39]
+		mapSAPFeeTax=[Cancellation1:2.14, Cancellation2:0.64, WillJoinCanx:18.17, WJ_NB:11.68, WJ_BB:0, WJ_SG_MTA:5.25, WJ_ML_MTA:10.61]
+		mapRAPFee = [Cancellation1:17.86, Cancellation2:5.36, WillJoinCanx:82.5, WJ_NB: 88.39, WJ_BB:58.04, WJ_SG_MTA:43.75, WJ_ML_MTA:88.39]
+		mapRAPFeeTax=[Cancellation1:2.14, Cancellation2:0.64, WillJoinCanx:16.5, WJ_NB:10.61, WJ_BB:6.96, WJ_SG_MTA:5.25, WJ_ML_MTA:10.61]
+		mapCMMFee = [Cancellation1: 17.86, Cancellation2:5.36, WillJoinCanx:82.5, WJ_NB:88.39, WJ_BB:0, WJ_SG_MTA:43.75, WJ_ML_MTA:88.39]
+		mapCMMFeeTax=[Cancellation1:2.14, Cancellation2:0.64, WillJoinCanx:16.5, WJ_NB:10.61, WJ_BB:0, WJ_SG_MTA:5.25, WJ_ML_MTA:10.61]
+		mapM24Fee = [Cancellation1:17.86, Cancellation2:5.36, WillJoinCanx:82.5, WJ_NB:88.39, WJ_BB:0, WJ_SG_MTA:43.75, WJ_ML_MTA:88.39]
+		mapM24FeeTax=[Cancellation1:2.14, Cancellation2:0.64, WillJoinCanx:16.5, WJ_NB:10.61, WJ_BB:0, WJ_SG_MTA:5.25, WJ_ML_MTA:10.61]
+		mapCQMFee = [Cancellation1:17.86, Cancellation2:5.36, WillJoinCanx:82.5, WJ_NB: 88.39, WJ_BB:0, WJ_SG_MTA:43.75, WJ_ML_MTA:88.39]
+		mapCQMFeeTax=[Cancellation1:2.14, Cancellation2:0.64, WillJoinCanx:16.5, WJ_NB:10.61, WJ_BB:0, WJ_SG_MTA:5.25, WJ_ML_MTA:10.61]
+		mapSAPFeeW = [Cancellation1:-17.86, Cancellation2:-5.36, WillJoinCanx:-90.83, WJ_NB:-97.32, WJ_BB:0, WJ_SG_MTA:-43.75, WJ_ML_MTA:-88.39]
+		mapSAPFeeTaxW=[Cancellation1:-2.14, Cancellation2:-0.64, WillJoinCanx:-18.17, WJ_NB:-11.68, WJ_BB:0, WJ_SG_MTA:-5.25, WJ_ML_MTA:-10.61]
+		mapRAPFeeW = [Cancellation1:-17.86, Cancellation2:-5.36, WillJoinCanx:-82.5, WJ_NB:-88.39, WJ_BB:-58.04, WJ_SG_MTA:-43.75, WJ_ML_MTA:-88.39]
+		mapRAPFeeTaxW=[Cancellation1:-2.14, Cancellation2:-0.64, WillJoinCanx:-16.5, WJ_NB:-10.61, WJ_BB:-6.96, WJ_SG_MTA:-5.25, WJ_ML_MTA:-10.61]
+		mapCMMFeeW = [Cancellation1:-17.86, Cancellation2:-5.36, WillJoinCanx:-82.5, WJ_NB:-88.39, WJ_BB:0, WJ_SG_MTA:-43.75, WJ_ML_MTA:-88.39]
+		mapCMMFeeTaxW=[Cancellation1:-2.14, Cancellation2:-0.64, WillJoinCanx:-16.5, WJ_NB:-10.61, WJ_BB:0, WJ_SG_MTA:-5.25, WJ_ML_MTA:-10.61]
+		mapM24FeeW = [Cancellation1:-17.86, Cancellation2:-5.36, WillJoinCanx:-82.5, WJ_NB:-88.39, WJ_BB:0, WJ_SG_MTA:-43.75, WJ_ML_MTA:-88.39]
+		mapM24FeeTaxW=[Cancellation1:-2.14, Cancellation2:-0.64, WillJoinCanx:-16.5, WJ_NB:-10.61, WJ_BB:0, WJ_SG_MTA:-5.25, WJ_ML_MTA:-10.61]
+		mapCQMFeeW = [Cancellation1:-17.86, Cancellation2:-5.36, WillJoinCanx:-82.5, WJ_NB:-88.39, WJ_BB:0, WJ_SG_MTA:-43.75, WJ_ML_MTA:-88.39]
+		mapCQMFeeTaxW=[Cancellation1:-2.14, Cancellation2:-0.64, WillJoinCanx:-16.5, WJ_NB:-10.61, WJ_BB:0, WJ_SG_MTA:-5.25, WJ_ML_MTA:-10.61]
+	}
+	else if (date.equals('2017-10-29T00:00:00') && mancon=="true")
+	{
+		log.info ("mancon fees")
+		mapSAPFee = [Cancellation1:16.67, Cancellation2:5.00, WillJoinCanx:90.83, WJ_NB:90.83, WJ_BB:0]
+		mapSAPFeeTax=[Cancellation1:3.33, Cancellation2:1.00, WillJoinCanx:18.17, WJ_NB:18.17, WJ_BB:0]
+		mapRAPFee = [Cancellation1:16.67, Cancellation2:5.00, WillJoinCanx:82.5, WJ_NB:82.5, WJ_BB:54.17]
+		mapRAPFeeTax=[Cancellation1:3.33, Cancellation2:1.00, WillJoinCanx:16.5, WJ_NB:16.5, WJ_BB:10.83]
+		mapCMMFee = [Cancellation1:16.67, Cancellation2:5.00, WillJoinCanx:82.5, WJ_NB:82.5, WJ_BB:0]
+		mapCMMFeeTax=[Cancellation1:3.33, Cancellation2:1.00, WillJoinCanx:16.5, WJ_NB:16.5, WJ_BB:0]
+		mapM24Fee = [Cancellation1:16.67, Cancellation2:5.00, WillJoinCanx:82.5, WJ_NB:90.83, WJ_BB:0]
+		mapM24FeeTax=[Cancellation1:3.33, Cancellation2:1.00, WillJoinCanx:16.5, WJ_NB:18.17, WJ_BB:0]
+		mapCQMFee = [Cancellation1:16.67, Cancellation2:5.00, WillJoinCanx:82.5, WJ_NB:90.83, WJ_BB:0]
+		mapCQMFeeTax=[Cancellation1:3.33, Cancellation2:1.00, WillJoinCanx:16.5, WJ_NB:18.17, WJ_BB:0]
+		mapSAPFeeW = [Cancellation1:-16.67, Cancellation2:-5.00, WillJoinCanx:-90.83, WJ_NB:-90.83, WJ_BB:0]
+		mapSAPFeeTaxW=[Cancellation1:-3.33, Cancellation2:-1.00, WillJoinCanx:-18.17, WJ_NB:-18.17, WJ_BB:0]
+		mapRAPFeeW = [Cancellation1:-16.67, Cancellation2:-5.00, WillJoinCanx:-82.5, WJ_NB:-82.5, WJ_BB:-54.17]
+		mapRAPFeeTaxW=[Cancellation1:-3.33, Cancellation2:-1.00, WillJoinCanx:-16.5, WJ_NB:-16.5, WJ_BB:-10.83]
+		mapCMMFeeW = [Cancellation1:-16.67, Cancellation2:-5.00, WillJoinCanx:-82.5, WJ_NB:-82.5, WJ_BB:0]
+		mapCMMFeeTaxW=[Cancellation1:-3.33, Cancellation2:-1.00, WillJoinCanx:-16.5, WJ_NB:-16.5, WJ_BB:0]
+		mapM24FeeW = [Cancellation1:-16.67, Cancellation2:-5.00, WillJoinCanx:-82.5, WJ_NB:-90.83, WJ_BB:0]
+		mapM24FeeTaxW=[Cancellation1:-3.33, Cancellation2:-1.00, WillJoinCanx:-16.5, WJ_NB:-18.17, WJ_BB:0]
+		mapCQMFeeW = [Cancellation1:-16.67, Cancellation2:-5.00, WillJoinCanx:-82.5, WJ_NB:-90.83, WJ_BB:0]
+		mapCQMFeeTaxW=[Cancellation1:-3.33, Cancellation2:-1.00, WillJoinCanx:-16.5, WJ_NB:-18.17, WJ_BB:0]
+	}
+	else if(date.equals('2016-10-01T00:00:00') && mancon =="false" )
+	{
+		log.info("oct prices 2016 without mancon")
+		mapSAPFee = [Cancellation1:18.18,Cancellation2:5.45 , WillJoinCanx : 108.33, WJ_NB:  99.09 , WJ_BB:  0 ]
+		mapSAPFeeTax=[Cancellation1:1.82, Cancellation2: 0.55 , WillJoinCanx : 21.67 , WJ_NB:   9.91 , WJ_BB: 0]
+		mapRAPFee = [Cancellation1:18.18, Cancellation2: 5.45 , WillJoinCanx : 108.33, WJ_NB:  90.00 , WJ_BB:  59.09 ]
+		mapRAPFeeTax=[Cancellation1:1.82, Cancellation2: 0.55 , WillJoinCanx : 21.67 , WJ_NB:   9 , WJ_BB: 5.91]
+		mapCMMFee = [Cancellation1:0, Cancellation2: 0 , WillJoinCanx : 108.33, WJ_NB:  90.00 , WJ_BB:  0 ]
+		mapCMMFeeTax=[Cancellation1:0, Cancellation2: 0 , WillJoinCanx : 21.67 , WJ_NB:   9 , WJ_BB: 0]
+		mapSAPFeeW = [Cancellation1:-18.18, Cancellation2: -5.45 , WillJoinCanx : -108.33, WJ_NB:  -99.09 , WJ_BB:  0 ]
+		mapSAPFeeTaxW=[Cancellation1:-1.82, Cancellation2: -0.55 , WillJoinCanx : -21.67 , WJ_NB:   -9.91 , WJ_BB: 0]
+		mapRAPFeeW = [Cancellation1:-18.18, Cancellation2: -5.45 , WillJoinCanx : -108.33, WJ_NB:  -90 , WJ_BB:  -59.09 ]
+		mapRAPFeeTaxW=[Cancellation1:-1.82, Cancellation2: -0.55 , WillJoinCanx : -21.67 , WJ_NB:   -9 , WJ_BB: -5.91]
+		mapCMMFeeW = [Cancellation1:0, Cancellation2: 0 , WillJoinCanx : -108.33, WJ_NB:  -90 , WJ_BB:  0 ]
+		mapCMMFeeTaxW=[Cancellation1:0, Cancellation2: 0 , WillJoinCanx : -21.67 , WJ_NB:   -9 , WJ_BB: 0]
+	}		
+	else if(date.equals('2016-10-01T00:00:00') && mancon =="true"  )
+	{
+		log.info ("mancon fees")
+		mapSAPFee = [Cancellation1:16.67, Cancellation2: 5.00 , WillJoinCanx : 108.33, WJ_NB:  90.83 , WJ_BB:  0 ]
+		mapSAPFeeTax=[Cancellation1:3.33, Cancellation2: 1.00 , WillJoinCanx : 21.67 , WJ_NB:  18.17 , WJ_BB: 0]
+		mapRAPFee = [Cancellation1:16.67, Cancellation2: 5.00 , WillJoinCanx : 108.33, WJ_NB:  82.5 , WJ_BB:  54.17 ]
+		mapRAPFeeTax=[Cancellation1:3.33, Cancellation2: 1.00 , WillJoinCanx : 21.67 , WJ_NB:   16.5 , WJ_BB: 10.83]
+		mapCMMFee = [Cancellation1:0, Cancellation2: 0 , WillJoinCanx : 108.33, WJ_NB:   82.5 , WJ_BB:  0 ]
+		mapCMMFeeTax=[Cancellation1:0, Cancellation2: 0 , WillJoinCanx : 21.67 , WJ_NB:   16.5 , WJ_BB: 0]
+		mapSAPFeeW = [Cancellation1:-16.67, Cancellation2: -5.00 , WillJoinCanx : -108.33, WJ_NB:  -90.83 , WJ_BB:  0 ]
+		mapSAPFeeTaxW=[Cancellation1:-3.33, Cancellation2: -1.00 , WillJoinCanx : -21.67 , WJ_NB:   -18.17 , WJ_BB: 0]
+		mapRAPFeeW = [Cancellation1:-16.67, Cancellation2: -5.00 , WillJoinCanx : -108.33, WJ_NB:  -82.5 , WJ_BB:  -54.17 ]
+		mapRAPFeeTaxW=[Cancellation1:-3.33, Cancellation2: -1.00 , WillJoinCanx : -21.67 , WJ_NB:   -16.5 , WJ_BB: -10.83]
+		mapCMMFeeW = [Cancellation1:0, Cancellation2: 0 , WillJoinCanx : -108.33, WJ_NB:  -82.5 , WJ_BB:  0 ]
+		mapCMMFeeTaxW=[Cancellation1:0, Cancellation2: 0 , WillJoinCanx : -21.67 , WJ_NB:   -16.5 , WJ_BB: 0]
+	}
+	else if(date.equals('2017-09-06T00:00:00') && mancon =="false" )
+	{
+		log.info("June 2017 prices without mancon")
+		mapSAPFee = [Cancellation1:17.86 ,Cancellation2: 5.36 ,  WillJoinCanx : 108.33, WJ_NB:  97.32 , WJ_BB:  0 ]
+		mapSAPFeeTax=[Cancellation1:2.14, Cancellation2:0.64, WillJoinCanx : 21.67 , WJ_NB:   11.68 , WJ_BB: 0]
+		mapRAPFee = [Cancellation1:17.86, Cancellation2: 5.36 , WillJoinCanx : 108.33, WJ_NB:  88.39 , WJ_BB:  58.04 ]
+		mapRAPFeeTax=[Cancellation1:2.14, Cancellation2: 0.64 , WillJoinCanx : 21.67 , WJ_NB:  10.61 , WJ_BB: 6.96]
+		mapCMMFee = [Cancellation1:0, Cancellation2: 0 , WillJoinCanx : 108.33, WJ_NB:  88.39 , WJ_BB:  0 ]
+		mapCMMFeeTax=[Cancellation1:0, Cancellation2: 0 , WillJoinCanx : 21.67 , WJ_NB: 10.61 , WJ_BB: 0]
+		mapSAPFeeW = [Cancellation1:-17.86, Cancellation2: -5.36 , WillJoinCanx : -108.33, WJ_NB:  -97.32 , WJ_BB:  0 ]
+		mapSAPFeeTaxW=[Cancellation1:-2.14, Cancellation2: -0.64 , WillJoinCanx : -21.67 , WJ_NB:   -11.68 , WJ_BB: 0]
+		mapRAPFeeW = [Cancellation1:-17.86, Cancellation2: -5.36 , WillJoinCanx : -108.33, WJ_NB:  -88.39 , WJ_BB:  -58.04 ]
+		mapRAPFeeTaxW=[Cancellation1:-2.14, Cancellation2: -0.64 , WillJoinCanx : -21.67 , WJ_NB:   -10.61 , WJ_BB: -6.96]
+		mapCMMFeeW = [Cancellation1:0, Cancellation2: 0 , WillJoinCanx : -108.33, WJ_NB:  -88.39 , WJ_BB:  0 ]
+		mapCMMFeeTaxW=[Cancellation1:0, Cancellation2: 0 , WillJoinCanx : -21.67 , WJ_NB:   -10.61 , WJ_BB: 0]
+	}
+	else if(date.equals('2017-09-06T00:00:00') && mancon =="true"  )
+	{
+		log.info ("June mancon fees")
+		mapSAPFee = [Cancellation1:16.67, Cancellation2: 5.00 , WillJoinCanx : 108.33, WJ_NB:  90.83 , WJ_BB:  0 ]
+		mapSAPFeeTax=[Cancellation1:3.33, Cancellation2: 1.00 , WillJoinCanx : 21.67 , WJ_NB:  18.17 , WJ_BB: 0]
+		mapRAPFee = [Cancellation1:16.67, Cancellation2: 5.00 , WillJoinCanx : 108.33, WJ_NB:  82.5 , WJ_BB:  54.17 ]
+		mapRAPFeeTax=[Cancellation1:3.33, Cancellation2: 1.00 , WillJoinCanx : 21.67 , WJ_NB:   16.5 , WJ_BB: 10.83]
+		mapCMMFee = [Cancellation1:0, Cancellation2: 0 , WillJoinCanx : 108.33, WJ_NB:   82.5 , WJ_BB:  0 ]
+		mapCMMFeeTax=[Cancellation1:0, Cancellation2: 0 , WillJoinCanx : 21.67 , WJ_NB:   16.5 , WJ_BB: 0]
+		mapSAPFeeW = [Cancellation1:-16.67, Cancellation2: -5.00 , WillJoinCanx : -108.33, WJ_NB:  -90.83 , WJ_BB:  0 ]
+		mapSAPFeeTaxW=[Cancellation1:-3.33, Cancellation2: -1.00 , WillJoinCanx : -21.67 , WJ_NB:   -18.17 , WJ_BB: 0]
+		mapRAPFeeW = [Cancellation1:-16.67, Cancellation2: -5.00 , WillJoinCanx : -108.33, WJ_NB:  -82.5 , WJ_BB:  -54.17 ]
+		mapRAPFeeTaxW=[Cancellation1:-3.33, Cancellation2: -1.00 , WillJoinCanx : -21.67 , WJ_NB:   -16.5 , WJ_BB: -10.83]
+		mapCMMFeeW = [Cancellation1:0, Cancellation2: 0 , WillJoinCanx : -108.33, WJ_NB:  -82.5 , WJ_BB:  0 ]
+		mapCMMFeeTaxW=[Cancellation1:0, Cancellation2: 0 , WillJoinCanx : -21.67 , WJ_NB:   -16.5 , WJ_BB: 0]
+	}	
+	else if (date < ('2016-10-01T00:00:00')  )
+	{
+		log.info("Pre Oct Prices")
+		mapSAPFee = [Cancellation1:18.26, Cancellation2: 5.48 , WillJoinCanx : 108.33, WJ_NB:  99.54 , WJ_BB:  0 ]
+		mapSAPFeeTax=[Cancellation1:1.74, Cancellation2: 0.52 , WillJoinCanx : 21.67 , WJ_NB:   9.46 , WJ_BB: 0]
+		mapRAPFee = [Cancellation1:18.26, Cancellation2: 5.48 , WillJoinCanx : 108.33, WJ_NB:  90.41 , WJ_BB:  59.36 ]
+		mapRAPFeeTax=[Cancellation1:1.74, Cancellation2: 0.52 , WillJoinCanx : 21.67 , WJ_NB:   8.59 , WJ_BB: 5.64]
+		mapCMMFee = [Cancellation1:0, Cancellation2: 0 , WillJoinCanx : 108.33, WJ_NB:  90.41 , WJ_BB:  0 ]
+		mapCMMFeeTax=[Cancellation1:0, Cancellation2: 0 , WillJoinCanx : 21.67 , WJ_NB:   8.59 , WJ_BB: 0]
+		mapSAPFeeW = [Cancellation1:-18.26, Cancellation2: -5.48 , WillJoinCanx : -108.33, WJ_NB:  -99.54 , WJ_BB:  0 ]
+		mapSAPFeeTaxW=[Cancellation1:-1.74, Cancellation2: -0.52 , WillJoinCanx : -21.67 , WJ_NB:   -9.46 , WJ_BB: 0]
+		mapRAPFeeW = [Cancellation1:-18.26, Cancellation2: -5.4795 , WillJoinCanx : -108.33, WJ_NB:  -90.41 , WJ_BB:  -59.36 ]
+		mapRAPFeeTaxW=[Cancellation1:-1.74, Cancellation2: -0.5205 , WillJoinCanx : -21.67 , WJ_NB:   -8.5890 , WJ_BB: -5.64]
+		mapCMMFeeW = [Cancellation1:0, Cancellation2: 0 , WillJoinCanx : -108.33, WJ_NB:  -90.41 , WJ_BB:  0 ]
+		mapCMMFeeTaxW=[Cancellation1:0, Cancellation2: 0 , WillJoinCanx : -21.67 , WJ_NB:   -8.59 , WJ_BB: 0]
+	}
+	
+	R_IsWaived = context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:SurchargeFeeList[1]/tns1:SurchargeFee['+j+']/tns1:IsWaived[1]}' )
+	if (payment == "SAP")
+	{
+		Fee = mapSAPFee[FeeCode]
+		FeeTax = mapSAPFeeTax[FeeCode]
+		if (R_IsWaived == "true")
+		{
+			Fee = mapSAPFeeW[FeeCode]
+			FeeTax = mapSAPFeeTaxW[FeeCode]
+		}
+	}
+	if (payment == "RAP")
+	{
+		Fee = mapRAPFee[FeeCode]
+		FeeTax = mapRAPFeeTax[FeeCode]
+		if (R_IsWaived == "true")
+		{
+			log.info("HERE"+j)
+			Fee = mapRAPFeeW[FeeCode]
+			FeeTax = mapRAPFeeTaxW[FeeCode]
+		}
+	}
+	if (payment == "CMM")
+	{
+		Fee = mapCMMFee[FeeCode]
+		FeeTax = mapCMMFeeTax[FeeCode]
+		if (R_IsWaived == "true")
+		{
+			Fee = mapCMMFeeW[FeeCode]
+			FeeTax = mapCMMFeeTaxW[FeeCode]
+		}
+	}
+	if (payment == "M24")
+	{
+		Fee = mapCMMFee[FeeCode]
+		FeeTax = mapCMMFeeTax[FeeCode]
+		if (R_IsWaived == "true")
+		{
+			Fee = mapCMMFeeW[FeeCode]
+			FeeTax = mapCMMFeeTaxW[FeeCode]
+		}
+	}
+	if (payment == "CQM")
+	{
+		Fee = mapCMMFee[FeeCode]
+		FeeTax = mapCMMFeeTax[FeeCode]
+		if (R_IsWaived == "true")
+		{
+			Fee = mapCMMFeeW[FeeCode]
+			FeeTax = mapCMMFeeTaxW[FeeCode]
+		}
+	}
+
+	TotalFees = Fee + FeeTax
+	if(R_IsWaived == "true")
+	{
+		R_TaxType= context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:SurchargeFeeList[1]/tns1:SurchargeFee[tns1:Code="'+FeeCode+'" and tns1:IsWaived="true"]/tns1:TaxType[1]}' )
+		R_Fee = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:SurchargeFeeList[1]/tns1:SurchargeFee[tns1:Code="'+FeeCode+'" and tns1:IsWaived="true"]/tns1:Fee[1]}' ))
+		R_FeeTax = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:SurchargeFeeList[1]/tns1:SurchargeFee[tns1:Code="'+FeeCode+'" and tns1:IsWaived="true"]/tns1:FeeTax[1]}' ))
+		R_FeeTaxPC = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:SurchargeFeeList[1]/tns1:SurchargeFee[tns1:Code="'+FeeCode+'" and tns1:IsWaived="true"]/tns1:TaxPercentage[1]}' ))
+		R_TotalFee = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:SurchargeFeeList[1]/tns1:SurchargeFee[tns1:Code="'+FeeCode+'" and tns1:IsWaived="true"]/tns1:Total[1]}' ))
+	}
+	else
+	{
+		R_TaxType =    context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:SurchargeFeeList[1]/tns1:SurchargeFee[tns1:Code="'+FeeCode+'" ]/tns1:TaxType[1]}' )
+		R_Fee = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:SurchargeFeeList[1]/tns1:SurchargeFee[tns1:Code="'+FeeCode+'" ]/tns1:Fee[1]}' ))
+		R_FeeTax = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:SurchargeFeeList[1]/tns1:SurchargeFee[tns1:Code="'+FeeCode+'" ]/tns1:FeeTax[1]}' ))
+		R_FeeTaxPC = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:SurchargeFeeList[1]/tns1:SurchargeFee[tns1:Code="'+FeeCode+'" ]/tns1:TaxPercentage[1]}' ))
+		R_TotalFee=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:SurchargeFeeList[1]/tns1:SurchargeFee[tns1:Code="'+FeeCode+'" ]/tns1:Total[1]}' ))
+	}
+
+ 
+
+	FeeTaxPC = FeeTax/Fee
+	TotalFee= Fee+FeeTax
+	if ( FeeCode == "WillJoinCanx")
+	{
+		func_compare(payment,"Fees,TaxType",FeeCode,"V",R_TaxType,"text")
+	}
+	else
+	{
+		func_compare(payment,"Fees,TaxType",FeeCode,"I",R_TaxType,"text")
+	}
+	func_compare(payment,"Fees,Fee",FeeCode,Fee,R_Fee,"notext")
+	func_compare(payment,"Fees,FeeTax",FeeCode,FeeTax,R_FeeTax,"notext")
+	func_compare(payment,"Fees,FeeTax%",FeeCode,FeeTaxPC,R_FeeTaxPC,"notext")
+	func_compare(payment,"Fees,FeeTotal",FeeCode,TotalFee,R_TotalFee,"notext")
+
+}	
+
+def func_compare(payment,element,name,ExcelValue,RadarValue,text)
+{
+	def product_type
+	String newVal1,newVal2,Diff
+	
+	if (text=="notext")
+	{
+		if (name == "CalculatedDeposit" || name == "CalculatedRegularInstalmentPremium")
+		{
+			Double doubleVal1 = Double.parseDouble(str1)
+			Double doubleVal2 = Double.parseDouble(str2);
+			DecimalFormat df = new DecimalFormat("0.00");
+			df.setMaximumFractionDigits(4);
+			newVal1 = df.format(doubleVal1);
+			newVal2 = df.format(doubleVal2);
+			Diff = df.format(doubleVal1-doubleVal2);
+		}
+		else
+		{
+			Float floatVal1 = ExcelValue;
+			Float floatVal2 = RadarValue;
+			DecimalFormat df = new DecimalFormat("0.00");
+			df.setMaximumFractionDigits(2);
+			newVal1 = df.format(floatVal1);
+			newVal2 = df.format(floatVal2);
+			Diff = df.format(floatVal1-floatVal2);
+		}
+		
+	}
+	else
+	{
+		newVal1 = ExcelValue;
+		newVal2 = RadarValue;
+	}
+	if (context.expand('${242RoadAll#BRC}') == "Y")
+	{
+		Car1 = context.expand( '${242RoadAll#Car_1}' )
+		Car2 = context.expand( '${242RoadAll#Car_2}' )
+		Car3 = context.expand( '${242RoadAll#Car_3}' )
+		Car4 = context.expand( '${242RoadAll#Car_4}' )
+		if (context.expand('${242RoadAll#Car_4}' ) != "-")
+		{
+			product_type = context.expand('${242RoadAll#PRODUCT_TYPE}' )+ " & BRC " + "(" + "Car1:" + Car1 + ",Car2:" + Car2 + ",Car3:" + Car3 + ",Car4:" + Car4 + ")"
+		}
+		else if (context.expand('${242RoadAll#Car_3}' ) != "-")
+		{
+			product_type = context.expand('${242RoadAll#PRODUCT_TYPE}' )+ " & BRC " + "(" + "Car1:" + Car1 + ",Car2:" + Car2 + ",Car3:" + Car3 + ")"
+		}
+		else if (context.expand('${242RoadAll#Car_2}' ) != "-")
+		{
+			product_type = context.expand('${242RoadAll#PRODUCT_TYPE}' )+ " & BRC " + "("  + "Car1:" + Car1 + ",Car2:" + Car2 + ")"
+		}
+		else
+		{
+			product_type = context.expand('${242RoadAll#PRODUCT_TYPE}' )+ " & BRC " + "(" + "Car1:" + Car1 + ")"
+		}
+	}
+	else
+	{
+		product_type = context.expand( '${242RoadAll#PRODUCT_TYPE}' )
+	}
+	
+	if(newVal1.equals(newVal2))
+	{
+		log.info Pass=(context.expand('${242RoadAll#ID}') + "|" + context.expand( '${242RoadAll#OFFER_CODE}' ) + "|"  + payment + "|" + product_type + "|" + context.expand( '${242RoadAll#COVER}' ) + "|" + name + "|" + element + "|" + "Match:| " + newVal1 + " | " + newVal2)
+		func_write (Pass, 'Matched')
+		
+	}
+	else
+	{
+		log.info Pass=(context.expand('${242RoadAll#ID}') + "|" + context.expand( '${242RoadAll#OFFER_CODE}' ) + "|" + payment + "|" + product_type + "|" + context.expand( '${242RoadAll#COVER}' ) + "|" + name + "|"  + element + "|"+ "DO NOT MATCH:| " + newVal1 + " | " + newVal2 +  " |" + "Diff:| " + Diff)
+		func_write (Pass, 'Failed')
+	}
+	
+}
+
+
+
+def func_write (line, Match)
+{
+	int totalOfValuesChecked = Integer.parseInt(context.expand( '${#TestCase#TotalOfValuesChecked}' ))
+	int numOfValuesFailed = Integer.parseInt(context.expand( '${#TestCase#NumOfValuesFailed}' ))
+	
+	BufferedWriter bw = new BufferedWriter (new FileWriter (context.expand('${#TestCase#File}'), true));
+	bw.write (line);
+	bw.newLine();
+	bw.flush();
+	bw.close();
+	totalOfValuesChecked++
+	testRunner.testCase.setPropertyValue( 'totalOfValuesChecked',  new Integer(totalOfValuesChecked).toString())
+	if (Match == ('Failed'))
+	{
+		numOfValuesFailed++
+		testRunner.testCase.setPropertyValue( 'numOfValuesFailed',  new Integer(numOfValuesFailed).toString())
+		BufferedWriter bw1 = new BufferedWriter (new FileWriter (context.expand('${#TestCase#FileFailed}'), true));
+		bw1.write (line);
+		bw1.newLine();
+		bw1.flush();
+		bw1.close();
+	}
+}]]></script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="Payment" id="5f907522-bb80-4979-9411-9d1e5302cc53">
+    <con:settings/>
+    <con:config>
+      <script>testRunner.testCase.setPropertyValue( 'ID',  context.expand( '${242RoadAll#ID}' ))
+def ID = context.expand( '${242RoadAll#ID}' )
+def productType = context.expand( '${242RoadAll#PRODUCT_TYPE}' )
+def paymentflag = context.expand( '${242RoadAll#PaymentType}' )
+def SAP,RAP,CMM,M24,CQM
+
+log.info(paymentflag)
+
+if(paymentflag.equals("NYNNN") || paymentflag.equals("YYNNN") || paymentflag.equals("YYYYY"))
+{
+	RAP="Y"
+}
+if(paymentflag.equals("YYNNN") || paymentflag.equals("YYYYY"))
+{
+	SAP="Y"
+}
+if(paymentflag.equals("YYYYY"))
+{
+	CMM="Y"
+	M24="N"
+	CQM="N"
+}
+
+int i = Integer.parseInt(context.expand( '${#TestCase#PaymentNumber}' ))
+
+if(i==1)
+{
+	if(RAP=="Y")
+	{
+		testRunner.testCase.setPropertyValue('payment','RAP');
+		i = i+1;
+		testRunner.testCase.setPropertyValue( 'PaymentNumber',  new Integer(i).toString())
+		log.info(ID+";"+i+"RAP")
+	}
+	else 
+	{
+		log.info("Skip Payment RAP")
+		i = i+1;
+		testRunner.testCase.setPropertyValue('PaymentNumber','1')
+		log.info(ID+";"+i+"RAP")
+	}
+}
+else if(i==2)
+{
+	if(SAP=="Y")
+	{
+		testRunner.testCase.setPropertyValue('payment','SAP');
+		i = i+1;
+		testRunner.testCase.setPropertyValue('PaymentNumber',new Integer(i).toString())
+		log.info(ID+";"+i+"SAP")
+	}
+	else
+	{
+		log.info("Skip Payment SAP")
+		i = i+1;
+		testRunner.testCase.setPropertyValue('PaymentNumber',new Integer(i).toString())
+		log.info(ID+";"+i+"SAP")
+		testRunner.gotoStepByName("Payment");
+	}
+}
+else if(i==3)
+{
+	if(CMM=="Y")
+	{
+		testRunner.testCase.setPropertyValue('payment','CMM');
+		i = i+1
+		testRunner.testCase.setPropertyValue('PaymentNumber',new Integer(i).toString())
+		log.info(ID+";"+i+"CMM")
+	}
+	else 
+	{
+		log.info("Skip Payment CMM")
+		testRunner.testCase.setPropertyValue('PaymentNumber','1')
+		log.info(ID+";"+i+"CMM")
+		testRunner.gotoStepByName("DataSource Loop");		
+	}
+}
+else if(i==4)
+{
+	if(CQM=="Y")
+	{
+		testRunner.testCase.setPropertyValue('payment','CQM');
+		i = i+1
+		testRunner.testCase.setPropertyValue('PaymentNumber',new Integer(i).toString())
+		log.info(ID+";"+i+"CQM")
+	}
+	else 
+	{
+		log.info("Skip Payment CQM")
+		testRunner.testCase.setPropertyValue('PaymentNumber','1')
+		log.info(ID+";"+i+"CQM")
+		testRunner.gotoStepByName("DataSource Loop");		
+	}
+}
+else if(i==5)
+{
+	if(M24=="Y")
+	{
+		testRunner.testCase.setPropertyValue('payment','M24');
+		i = i+1
+		testRunner.testCase.setPropertyValue('PaymentNumber',new Integer(i).toString())
+		log.info (ID+";"+i+"M24")
+	}
+	else 
+	{
+		log.info("Skip Payment M24")
+		testRunner.testCase.setPropertyValue('PaymentNumber','1')
+		log.info (ID+";"+i+"M24")
+		testRunner.gotoStepByName("DataSource Loop");		
+	}
+}
+else 
+{	
+	testRunner.testCase.setPropertyValue( 'PaymentNumber', '1')
+	testRunner.gotoStepByName("DataSource Loop");
+}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="Validation New" id="53053659-4ec9-4f73-a719-14efe749d685">
+    <con:settings/>
+    <con:config>
+      <script><![CDATA[import java.text.DecimalFormat;
+int numOfIterations = Integer.parseInt(context.expand( '${#TestCase#NumOfIterations}' ))
+numOfIterations++
+testRunner.testCase.setPropertyValue( 'NumOfIterations',  new Integer(numOfIterations).toString())
+def id = context.expand('${242RoadAll#ID}')
+log.info (id)
+
+// Check what Products to validate
+String product_Roadside = context.expand( '${242RoadAll#RO}' );
+String product_Relay = context.expand( '${242RoadAll#RE}' );
+String product_StayMobile = context.expand( '${242RoadAll#SM}' );
+String product_HomeStart = context.expand( '${242RoadAll#HS}' );
+String product_BRC = context.expand( '${242RoadAll#BRC}' );
+String Offer = context.expand( '${242RoadAll#OFFER}' );
+String fee_Cancel = context.expand( '${242RoadAll#C_F}' );
+String fee_WillJoin= context.expand( '${242RoadAll#W_F}' );
+String agent_Discount = context.expand( '${242RoadAll#A_D}' );
+def payment = context.expand( '${#TestCase#payment}' ) 
+def productType = context.expand( '${242RoadAll#PRODUCT_TYPE}' )
+def post = context.expand( '${242RoadAll#POSTCODE}' )
+
+if(product_Roadside.equals('Y'))
+{
+	String ProdCode = context.expand('${#TestCase#RoadList}');
+	String ProdName = context.expand('${#TestCase#RoadNameList}');
+	func_CheckCore(payment, "CorePrice", ProdName, "RO")
+	func_CheckAAF(payment, "AAF", ProdName, "RO")
+	if(Offer.equals("Y"))
+	{
+		if ( ( context.expand('${242RoadAll#' + payment + ',RO,TYPE}')== "P")&& (context.expand('${242RoadAll#' + payment + ',RO,AMOUNT}')== "0" ))
+		{
+			log.info("NO OFFER TO CHECK")
+		}
+		else
+		{
+			func_CheckOffer(payment, "OFFER", ProdName, "RO")
+		}
+	}
+	if(!(agent_Discount.equals("0")))
+	{
+		func_CheckDiscount(payment, "AGENTDISCOUNT", ProdName, "RO")																				
+	}
+	func_CheckAccountingTotals(payment, "AccountingTotals", ProdName, "RO")
+	func_CheckProdOthers(payment, "ProductOthers", ProdName, "RO")
+}
+
+if(product_Relay.equals('Y'))
+{
+	String ProdCode = context.expand('${#TestCase#RoadList}');
+	String ProdName = "Relay"
+	func_CheckCore(payment, "CorePrice", ProdName, "RE")
+	func_CheckAAF(payment, "AAF", ProdName, "RE")
+	if(Offer.equals("Y"))
+	{
+		if ( ( context.expand('${242RoadAll#' + payment + ',RE,TYPE}')== "P" )&& (context.expand('${242RoadAll#' + payment + ',RE,AMOUNT}')== "0" ))
+		{
+			log.info("NO OFFER TO CHECK")
+		}
+		else
+		{
+			func_CheckOffer(payment, "OFFER", ProdName, "RE")
+		}
+	}
+	if(!(agent_Discount.equals("0")))
+	{
+		func_CheckDiscount(payment, "AGENTDISCOUNT", ProdName, "RE")																				
+	}
+	func_CheckAccountingTotals(payment, "AccountingTotals", ProdName, "RE")
+	func_CheckProdOthers(payment, "ProductOthers", ProdName, "RE")
+}
+
+if(product_StayMobile.equals('Y'))
+{
+	String ProdCode = context.expand('${#TestCase#RoadList}');
+	String ProdName = "StayMobile"
+	func_CheckCore(payment, "CorePrice", ProdName, "SM")
+	func_CheckAAF(payment, "AAF", ProdName, "SM")
+	if(Offer.equals("Y"))
+	{
+		if ( ( context.expand('${242RoadAll#' + payment + ',SM,TYPE}')== "P" )&& (context.expand('${242RoadAll#' + payment + ',SM,AMOUNT}')== "0" ))
+		{
+			log.info("NO OFFER TO CHECK")
+		}
+		else
+		{
+			func_CheckOffer(payment, "OFFER", ProdName, "SM")
+		}
+	}
+	if(!(agent_Discount.equals("0")))
+	{
+		func_CheckDiscount(payment, "AGENTDISCOUNT", ProdName, "SM")																				
+	}
+	func_CheckAccountingTotals(payment, "AccountingTotals", ProdName, "SM")
+	func_CheckProdOthers(payment, "ProductOthers", ProdName, "SM")
+}
+if(product_HomeStart.equals('Y'))
+{
+	String ProdCode = context.expand('${#TestCase#RoadList}');
+	String ProdName = "HomeStart"
+	func_CheckCore(payment, "CorePrice", ProdName, "HS")
+	func_CheckAAF(payment, "AAF", ProdName, "HS")
+	if(Offer.equals("Y"))
+	{
+		if ( ( context.expand('${242RoadAll#' + payment + ',HS,TYPE}')== "P" )&& (context.expand('${242RoadAll#' + payment + ',HS,AMOUNT}')== "0" ))
+		{
+			log.info("NO OFFER TO CHECK")
+		}
+		else
+		{
+			func_CheckOffer(payment, "OFFER", ProdName, "HS")
+		}
+	}
+	if(!(agent_Discount.equals("0")))
+	{
+		func_CheckDiscount(payment, "AGENTDISCOUNT", ProdName, "HS")																				
+	}
+	func_CheckAccountingTotals(payment, "AccountingTotals", ProdName, "HS")
+	func_CheckProdOthers(payment, "ProductOthers", ProdName, "HS")
+}
+if(product_BRC.equals('Y'))
+{
+	String ProdCode = context.expand('${#TestCase#RoadList}');
+	String ProdName = "BRC"
+	func_CheckCore(payment, "CorePrice", ProdName, "BRC")
+	func_CheckAAF(payment, "AAF", ProdName, "BRC")
+	if(Offer.equals("Y"))
+	{
+		if ( ( context.expand('${242RoadAll#' + payment + ',BRC,TYPE}')== "P" )&& (context.expand('${242RoadAll#' + payment + ',BRC,AMOUNT}')== "0" ))
+		{
+			log.info("NO OFFER TO CHECK")
+		}
+		else
+		{
+			func_CheckOffer(payment, "OFFER", ProdName, "BRC")
+		}
+	}
+	if(!(agent_Discount.equals("0")))
+	{
+		func_CheckDiscount(payment, "AGENTDISCOUNT", ProdName, "BRC")																				
+	}
+	func_CheckAccountingTotals(payment, "AccountingTotals", ProdName, "BRC")
+	func_CheckProdOthers(payment, "ProductOthers", ProdName, "BRC")
+}
+
+func_CheckTotalPriceBreakdown(payment)
+func_CheckPolicyOthers(payment)
+if (productType == "Local Driver" ||  productType == "ROCO" || productType ==  "ROPOV" || productType == "Standby" ||  productType == "Start Up" || productType == "Local Driver,Stay Mobile")
+{
+	log.info("NO AQRP")
+}
+else
+{
+	func_CheckAQRP(payment)
+}
+
+testRunner.gotoStepByName("Payment");
+
+Float R_CoreTotal
+
+//function definitions
+def func_CheckCore(payment,element,name,syntax)
+{
+	log.info(payment+"," + element +"," + name+","  +syntax)
+	def postcode = context.expand( '${242RoadAll#POSTCODE}' )
+	Float R_Net = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:CorePrice[1]/tns1:NetRate[1]}' ))
+	Float R_NetTax = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:CorePrice[1]/tns1:NetRateTax[1]}' ))
+	Float R_Comm = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:CorePrice[1]/tns1:Commission[1]}' ))
+	Float R_CommTax = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:CorePrice[1]/tns1:CommissionTax[1]}' ))
+	Float R_IFD = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:CorePrice[1]/tns1:InternallyFundedDiscount[1]}' ))
+	Float R_TaxPercentage = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:CorePrice[1]/tns1:TaxPercentage[1]}' ))
+	Float R_TaxTotal = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:CorePrice[1]/tns1:TaxTotal[1]}' ))
+	R_CoreTotal = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:CorePrice[1]/tns1:Total[1]}' ))
+		
+	func_write(payment,"CORE,Net",name,R_Net)
+	func_write(payment,"CORE,NetTax",name,R_NetTax)
+	func_write(payment,"CORE,Commission",name,R_Comm)
+	func_write(payment,"CORE,CommissionTax",name,R_CommTax)
+	func_write(payment,"CORE,IFD",name,R_IFD)
+	func_write(payment,"CORE,Tax%",name,R_TaxPercentage)
+	func_write(payment,"CORE,TaxTotal",name,R_TaxTotal)
+	func_write(payment,"CORE,Total",name,R_CoreTotal)
+}
+
+def func_CheckAAF(payment,element,name,syntax)
+{
+	log.info(payment+"," + element +"," + name+","  +syntax)
+
+	Float R_AAF= Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:ArrangementFee[1]/tns1:Fee[1]}' ))
+	Float R_AAFTax= Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:ArrangementFee[1]/tns1:FeeTax[1]}' ))
+	Float R_AAFIFD= Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:ArrangementFee[1]/tns1:InternallyFundedDiscount[1]}' ))
+	Float R_AAFTaxPercentage= Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:ArrangementFee[1]/tns1:TaxPercentage[1]}' ))
+	Float R_AAFTotal= Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:ArrangementFee[1]/tns1:Total[1]}' ))
+	Float R_CoreProductTotal = R_AAFTotal + R_CoreTotal
+	func_write(payment,"AAF,AAF",name,R_AAF)
+	func_write(payment,"AAF,AAFTax",name,R_AAFTax)
+	func_write(payment,"AAF,IFD",name,R_AAFIFD)
+	func_write(payment,"AAF,Tax%",name,R_AAFTaxPercentage)
+	func_write(payment,"AAF,Total",name,R_AAFTotal)
+	func_write(payment,"AAF,Total",name,R_AAFTotal)
+	func_write(payment,"Core,ProductTotal",name,R_CoreProductTotal)
+}
+
+def func_CheckOffer(payment,element,name,syntax)
+{
+	log.info(payment+"," + element +"," + name+","  +syntax)
+	
+	Float R_OfferNet=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:OfferCodeDiscountList[1]/tns1:OfferCodeDiscount[1]/tns1:NetRate[1]}'))
+	Float R_OfferNetTax=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:OfferCodeDiscountList[1]/tns1:OfferCodeDiscount[1]/tns1:NetRateTax[1]}'))
+	Float R_OfferComm=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:OfferCodeDiscountList[1]/tns1:OfferCodeDiscount[1]/tns1:Commission[1]}'))
+	Float R_OfferCommTax=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:OfferCodeDiscountList[1]/tns1:OfferCodeDiscount[1]/tns1:CommissionTax[1]}'))
+	Float R_OfferCoreTotal = R_OfferCommTax + R_OfferComm
+	Float R_OfferAAF=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:OfferCodeDiscountList[1]/tns1:OfferCodeDiscount[1]/tns1:ArrangementFee[1]}'))
+	Float R_OfferAAFTax=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:OfferCodeDiscountList[1]/tns1:OfferCodeDiscount[1]/tns1:ArrangementFeeTax[1]}'))
+	Float R_OfferAFFTotal=R_OfferAAF+R_OfferAAFTax
+	Float R_OfferIFD=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:OfferCodeDiscountList[1]/tns1:OfferCodeDiscount[1]/tns1:InternallyFundedDiscount[1]}'))
+	Float R_OfferTaxPercentage=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:OfferCodeDiscountList[1]/tns1:OfferCodeDiscount[1]/tns1:TaxPercentage[1]}'))
+	Float R_OfferTotal=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:OfferCodeDiscountList[1]/tns1:OfferCodeDiscount[1]/tns1:Total[1]}'))
+	
+	func_write(payment,"Offer,Net",name,R_OfferNet)
+	func_write(payment,"Offer,NetTax",name,R_OfferNetTax)
+	func_write(payment,"Offer,Commission",name,R_OfferComm)
+	func_write(payment,"Offer,CommissionTax",name,R_OfferCommTax)
+	func_write(payment,"Offer,CoreTotal",name,R_OfferCoreTotal)
+	func_write(payment,"Offer,AAF",name,R_OfferAAF)
+	func_write(payment,"Offer,AAFTax",name,R_OfferAAFTax)
+	func_write(payment,"Offer,AAFTotal",name,R_OfferAFFTotal)
+	func_write(payment,"Offer,IFD",name,R_OfferIFD)
+	func_write(payment,"Offer,Tax%",name,R_OfferTaxPercentage)
+	func_write(payment,"Offer,Total",name,R_OfferTotal)
+
+}
+
+/*def func_CheckDiscount(payment,element,name,syntax)
+{
+	log.info(payment+"," + element +"," + name+","  +syntax)
+	Float agent_Disc = Float.parseFloat(context.expand( '${242RoadAll#A_D}' ))
+	
+	for ( i = 1; i<=agent_Disc; i++ )
+	{
+		Float ADNet= 0.0
+		Float R_ADNet=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AgentDiscountList[1]/tns1:AgentDiscount['+i+']/tns1:NetRate[1]}'))
+		Float ADNetTax= 0.0
+		Float R_ADNetTax=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AgentDiscountList[1]/tns1:AgentDiscount['+i+']/tns1:NetRateTax[1]}'))
+		Float ADComm= Float.parseFloat( context.expand('${242RoadAll#' + payment + ',' + syntax +  ',DISCOUNT'+i+',MARGIN}'))
+		Float R_ADComm=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AgentDiscountList[1]/tns1:AgentDiscount['+i+']/tns1:Commission[1]}'))
+		Float ADCommTax= Float.parseFloat( context.expand('${242RoadAll#' + payment + ',' + syntax +  ',DISCOUNT'+i+',MARGINTAX}'))
+		Float R_ADCommTax=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AgentDiscountList[1]/tns1:AgentDiscount['+i+']/tns1:CommissionTax[1]}'))
+		Float ADAAF= Float.parseFloat( context.expand('${242RoadAll#' + payment + ',' + syntax +  ',DISCOUNT'+i+',AAF}'))
+		Float R_ADAAF=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AgentDiscountList[1]/tns1:AgentDiscount['+i+']/tns1:ArrangementFee[1]}'))
+		Float ADAAFTax= Float.parseFloat( context.expand('${242RoadAll#' + payment + ',' + syntax +  ',DISCOUNT'+i+',AAFTAX}'))
+		Float R_ADAAFTax=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AgentDiscountList[1]/tns1:AgentDiscount['+i+']/tns1:ArrangementFeeTax[1]}'))
+		Float ADIFD= Float.parseFloat( context.expand('${242RoadAll#' + payment + ',' + syntax +  ',DISCOUNT'+i+',IFD}'))
+		Float R_ADIFD=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AgentDiscountList[1]/tns1:AgentDiscount['+i+']/tns1:InternallyFundedDiscount[1]}'))
+		Float ADTaxPercentage= Float.parseFloat( context.expand('${242RoadAll#' + payment + ',' + syntax +  ',DISCOUNT'+i+',TAXPC}'))
+		Float R_ADTaxPercentage=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AgentDiscountList[1]/tns1:AgentDiscount['+i+']/tns1:TaxPercentage[1]}'))
+		Float ADTotal= Float.parseFloat( context.expand('${242RoadAll#' + payment + ',' + syntax +  ',DISCOUNT'+i+'TOTAL}'))
+		Float R_ADTotal=Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AgentDiscountList[1]/tns1:AgentDiscount['+i+']/tns1:Total[1]}'))
+	
+		func_write(payment,"AD"+i+",Net",name,ADNet,R_ADNet,"notext")
+		func_write(payment,"AD"+i+",NetTax",name,ADNetTax,R_ADNetTax,"notext")
+		func_write(payment,"AD"+i+",Commission",name,ADComm,R_ADComm,"notext")
+		func_write(payment,"AD"+i+",CommissionTax",name,ADCommTax,R_ADCommTax,"notext")
+		func_write(payment,"AD"+i+",AAF",name,ADAAF,R_ADAAF,"notext")
+		func_write(payment,"AD"+i+",AAFTax",name,ADAAFTax, R_ADAAFTax,"notext")
+		func_write(payment,"AD"+i+",IFD",name,ADIFD, R_ADIFD,"notext")
+		func_write(payment,"AD"+i+",Tax%",name,ADTaxPercentage, R_ADTaxPercentage,"notext")
+		func_write(payment,"AD"+i+",Total",name,ADTotal, R_ADTotal,"notext")
+		i++
+	}
+}
+*/
+def func_CheckAccountingTotals(payment, element, name, syntax)
+{
+	log.info(payment+"," + element +"," + name+","  +syntax)
+
+	Float R_CoreDiscTotal = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AccountingTotals[1]/tns1:CoreDiscountsTotal[1]}' ))
+	Float R_CoreDiscTaxTotal = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AccountingTotals[1]/tns1:CoreDiscountsTaxTotal[1]}' ))
+	Float R_CoreCommDiscTotal = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AccountingTotals[1]/tns1:CoreCommissionDiscountsTotal[1]}' ))
+	Float R_CoreNetDiscTotal = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AccountingTotals[1]/tns1:CoreNetRateDiscountsTotal[1]}' ))
+	Float R_AAFGrandDiscTotal = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AccountingTotals[1]/tns1:ArrangementFeeGrandDiscountsTotal[1]}' ))
+	Float R_AAFTaxDiscTotal = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AccountingTotals[1]/tns1:ArrangementFeeTaxDiscountsTotal[1]}' ))
+	Float R_AAFDiscTotal = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:PriceBreakdown[1]/tns1:AccountingTotals[1]/tns1:ArrangementFeeDiscountsTotal[1]}' ))
+
+	func_write(payment,"AccountingTotals,CoreDiscTotal",name,R_CoreDiscTotal)
+	func_write(payment,"AccountingTotals,CoreDiscTaxTotal",name,R_CoreDiscTaxTotal)
+	func_write(payment,"AccountingTotals,CoreCommDiscTotal",name,R_CoreCommDiscTotal)
+	func_write(payment,"AccountingTotals,CoreNetDiscTotal",name,R_CoreNetDiscTotal)
+	func_write(payment,"AccountingTotals,AAFGrandDiscTotal",name,R_AAFGrandDiscTotal)
+	func_write(payment,"AccountingTotals,AAFTaxDiscTotal",name,R_AAFTaxDiscTotal)
+	func_write(payment,"AccountingTotals,AAFDiscTotal",name,R_AAFDiscTotal)
+		
+}
+
+def func_CheckProdOthers(payment, element, name, syntax )
+{
+	log.info(payment+"," + element +"," + name+","  +syntax)
+	
+	def R_TaxType = context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:TaxType[1]}' )
+	def R_TaxDate = context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:TaxDate[1]}' )
+	def R_PolicyDate = context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:DateInceptedOnPolicy[1]}' )
+
+	Float R_RelFactor = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:RelativityPriceFactor[1]}' ))
+	Float R_ExpFactor = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:ExtrapolationFactor[1]}' ))
+	Float R_AAFTOTAL = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:ArrangementFeeTotal[1]}' ))
+	Float R_TotalLessAAFTotal = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:TotalLessArrangementFeeTotal[1]}' ))
+	Float R_TotalLessDisc = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:TotalLessDiscounts[1]}' ))
+	Float R_ProdTotal = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:Product[tns1:ProductPriceName="' + name + '"]/tns1:PriceList[1]/tns1:Price[1]/tns1:Total[1]}' ))
+
+	//func_write(payment,"Total,TaxType",name,"I",R_TaxType,"text")
+	//func_write(payment,"Total,TaxDate",name,${#TestCase#TaxDate},R_TaxDate,"text")
+	//func_write(payment,"Total,PolicyDate",name,"${#TestCase#PolicyStartTime},R_PolicyDate,"text")
+	func_write(payment,"Total,RelFactor",name,R_RelFactor)
+	func_write(payment,"Total,Extrapolation",name,R_ExpFactor)
+	func_write(payment,"Total,AAFTotal",name,R_AAFTOTAL)
+	func_write(payment,"Total,TotalLessAAFTotal",name,R_TotalLessAAFTotal)
+	func_write(payment,"Total,TotalLessDisc",name,R_TotalLessDisc)
+	func_write(payment,"Total,ProductTotal",name,R_ProdTotal)
+	
+}
+
+def func_CheckTotalPriceBreakdown(payment)
+{
+	Float R_CombinedTotal = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:TotalPriceBreakdown[1]/tns1:Total[1]}' ))
+	Float R_TotalLessDisc = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:TotalPriceBreakdown[1]/tns1:TotalExcludingDiscounts[1]}' ))
+	Float R_DiscountsTotal = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:TotalPriceBreakdown[1]/tns1:DiscountTotal[1]}' ))
+	Float R_BaseCoverTotal = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:TotalPriceBreakdown[1]/tns1:BaseCoverTotal[1]}' ))
+	Float R_BaseCoverLessDisc = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:TotalPriceBreakdown[1]/tns1:BaseCoverTotalLessDiscounts[1]}' ))
+	Float R_BaseCoverAAFTotal = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:TotalPriceBreakdown[1]/tns1:BaseCoverArrangementFeeTotal[1]}' ))
+	Float R_TotalAAF = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:TotalPriceBreakdown[1]/tns1:TotalArrangementFee[1]}' ))
+	Float R_TotalFee = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:TotalPriceBreakdown[1]/tns1:SurchargeFeeTotal[1]}' ))
+	Float R_TotalLessAAFLessAddons = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:TotalPriceBreakdown[1]/tns1:TotalLessTotalAAFAndTotalAddons[1]}' ))
+	Float R_TotalLessFee = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:TotalPriceBreakdown[1]/tns1:TotalLessSurchargeFees[1]}' ))
+	Float R_TotalLessAAF = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:TotalPriceBreakdown[1]/tns1:TotalLessArrangementFees[1]}' ))
+	Float R_TotalVAT = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:TotalPriceBreakdown[1]/tns1:TotalVAT[1]}' ))
+	Float R_TotalIPT = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:TotalPriceBreakdown[1]/tns1:TotalIPT[1]}' ))
+		
+	func_write(payment,"TotalPriceBreakdown,CombinedTotal","Total",R_CombinedTotal)
+	func_write(payment,"TotalPriceBreakdown,TotalLessDisc","Total",R_TotalLessDisc)
+	func_write(payment,"TotalPriceBreakdown,DiscountsTotal","Total",R_DiscountsTotal)
+	func_write(payment,"TotalPriceBreakdown,BaseCoverTotal","Total",R_BaseCoverTotal)
+	func_write(payment,"TotalPriceBreakdown,BaseCoverLessDisc","Total",R_BaseCoverLessDisc)
+	func_write(payment,"TotalPriceBreakdown,BaseCoverAAFTotal","Total",R_BaseCoverAAFTotal)
+	func_write(payment,"TotalPriceBreakdown,TotalAAF","Total",R_TotalAAF)
+	func_write(payment,"TotalPriceBreakdown,TotalFee","Total",R_TotalFee)
+	func_write(payment,"TotalPriceBreakdown,TotalLessAAFLessAddons","Total",R_TotalLessAAFLessAddons)
+	func_write(payment,"TotalPriceBreakdown,TotalLessFee","Total",R_TotalLessFee)
+	func_write(payment,"TotalPriceBreakdown,TotalLessAAF","Total",R_TotalLessAAF)
+	func_write(payment,"TotalPriceBreakdown,TotalVAT","Total",R_TotalVAT)
+	func_write(payment,"TotalPriceBreakdown,TotalIPT","Total",R_TotalIPT)
+
+	if (payment=="CMM")
+	{	
+		Float R_2CombinedTotal = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:PolicyTotalPriceBreakdown[1]/tns1:Total[1]}' ))
+		Float R_2TotalLessDisc = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:PolicyTotalPriceBreakdown[1]/tns1:TotalExcludingDiscounts[1]}' ))
+		Float R_2DiscountsTotal = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:PolicyTotalPriceBreakdown[1]/tns1:DiscountTotal[1]}' ))
+		Float R_2BaseCoverTotal = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:PolicyTotalPriceBreakdown[1]/tns1:BaseCoverTotal[1]}' ))
+		Float R_2BaseCoverAAFTotal = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:PolicyTotalPriceBreakdown[1]/tns1:BaseCoverArrangementFeeTotal[1]}' ))
+		Float R_2BaseCoverLessDisc = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:PolicyTotalPriceBreakdown[1]/tns1:BaseCoverTotalLessDiscounts[1]}' ))
+		Float R_2TotalAAF = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:PolicyTotalPriceBreakdown[1]/tns1:TotalArrangementFee[1]}' ))
+		Float R_2TotalFee = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:PolicyTotalPriceBreakdown[1]/tns1:SurchargeFeeTotal[1]}' ))
+		Float R_2TotalLessAAFLessAddons = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:PolicyTotalPriceBreakdown[1]/tns1:TotalLessTotalAAFAndTotalAddons[1]}' ))
+		Float R_2TotalLessFee = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:PolicyTotalPriceBreakdown[1]/tns1:TotalLessSurchargeFees[1]}' ))
+		Float R_2TotalLessAAF = Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:PolicyTotalPriceBreakdown[1]/tns1:TotalLessArrangementFees[1]}' ))
+		Float R_2TotalVAT = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:PolicyTotalPriceBreakdown[1]/tns1:TotalVAT[1]}' ))
+		Float R_2TotalIPT = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:PolicyTotalPriceBreakdown[1]/tns1:TotalIPT[1]}' ))		
+		
+		
+		func_write(payment,"PolicyTotal,2CombinedTotal","Total",R_2CombinedTotal)
+		func_write(payment,"PolicyTotal,2TotalLessDisc","Total",R_2TotalLessDisc)
+		func_write(payment,"PolicyTotal,2DiscountsTotal","Total",R_2DiscountsTotal)
+		func_write(payment,"PolicyTotal,2BaseCoverTotal","Total",R_2BaseCoverTotal)
+		func_write(payment,"PolicyTotal,2BaseCoverLessDisc","Total",R_2BaseCoverLessDisc)
+		func_write(payment,"PolicyTotal,2BaseCoverAAFTotal","Total",R_2BaseCoverAAFTotal)
+		func_write(payment,"PolicyTotal,2TotalAAF","Total",R_2TotalAAF)
+		func_write(payment,"PolicyTotal,2TotalFee","Total",R_2TotalFee)
+		func_write(payment,"PolicyTotal,2TotalLessAAFLessAddons","Total",R_2TotalLessAAFLessAddons)
+		func_write(payment,"PolicyTotal,2TotalLessFee","Total",R_2TotalLessFee)
+		func_write(payment,"PolicyTotal,2TotalLessAAF","Total",R_2TotalLessAAF)
+		func_write(payment,"PolicyTotal,2TotalVAT","Total",R_2TotalVAT)
+		func_write(payment,"PolicyTotal,2TotalIPT","Total",R_2TotalIPT)
+	}
+}	
+
+def func_CheckPolicyOthers(payment)
+{
+	
+		log.info(payment)
+	//Float BestPrice=Float.parseFloat( context.expand('${242RoadAll#' + payment +',BestPrice}'))
+	Float R_BestPrice = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:BestPrice[1]}' ))
+	
+	
+	Float R_CalcDeposit = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:CalculatedDeposit[1]}' ))
+	//Float CalcAPR=Float.parseFloat( context.expand('${242RoadAll#' + payment +',CalcAPR}'))
+
+	Float R_CalcAPR= Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:CalculatedTotalAPR[1]}' ))
+	
+	Float R_CalcRegInstPremium = Float.parseFloat( context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:ProductList[1]/tns1:Payment[tns1:PaymentType="' + payment + '"]/tns1:CalculatedRegularInstalmentPremium[1]}' ))
+		
+	//func_write(payment,"PolicyTotal,BestPrice","Total",BestPrice,R_BestPrice)
+	func_write(payment,"PolicyTotal,CalcDeposit","Total",R_CalcDeposit)
+	//func_write(payment,"PolicyTotal,CalcAPR","Total",CalcAPR,R_CalcAPR)
+	func_write(payment,"PolicyTotal,CalcRegInstPremium","Total",R_CalcRegInstPremium)
+	
+}
+
+def func_CheckAQRP(payment)
+{
+	log.info("AQRP")
+	//Float RenewalStartDate="2017-01-01T00:00:00"
+	def R_RenewalStartDate= context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:AverageQuotedRenewalDetailsList[1]/tns1:AverageQuotedRenewalDetails[tns1:PaymentType="'+payment+'"]/tns1:RenewalStartDate[1]}' )
+	//Float RenewalEndDate="2017-12-31T00:00:00"
+	def R_RenewalEndDate= context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:AverageQuotedRenewalDetailsList[1]/tns1:AverageQuotedRenewalDetails[tns1:PaymentType="'+payment+'"]/tns1:RenewalStartDate[1]}' )
+	
+	//Float AQRP=Float.parseFloat( context.expand('${242RoadAll#' + payment +',AQRP}'))
+	Float R_AQRP= Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:AverageQuotedRenewalDetailsList[1]/tns1:AverageQuotedRenewalDetails[tns1:PaymentType="'+payment+'"]/tns1:RenewalPrice[1]}' ))
+
+	//Float AmountDeltaOnRenewalPrice=Float.parseFloat( context.expand('${242RoadAll#' + payment +',AmountDeltaOnAverageQuotedRenewalPrice}'))
+	Float R_AmountDeltaOnRenewalPrice= Float.parseFloat(context.expand( '${242NB Request#Response#declare namespace tns1=\'http://www.theaa.com/CommonServices/Data/Product.2\'; declare namespace tns3=\'http://www.theaa.com/CommonServices/Message/BS/Road/GenerateQuote_NB.2\'; //tns3:GenerateQuoteResponse[1]/tns3:AverageQuotedRenewalDetailsList[1]/tns1:AverageQuotedRenewalDetails[tns1:PaymentType="'+payment+'"]/tns1:AmountDeltaOnRenewalPrice[1]}' ))
+
+	//func_write(payment,"AQRP,RenewalStartDate","AQRP",RenewalStartDate,R_RenewalStartDate,"text")
+	//func_write(payment,"AQRP,RenewalEndDate","AQRP",RenewalEndDate,R_RenewalEndDate)
+	func_write(payment,"AQRP,AQRP","AQRP",R_AQRP)
+	func_write(payment,"AQRP,AmountDeltaOnRenewalPrice","AQRP",R_AmountDeltaOnRenewalPrice)
+	
+}
+
+
+def func_write (payment,element,name,RadarValue)
+{
+	int totalOfValuesChecked = Integer.parseInt(context.expand( '${#TestCase#TotalOfValuesChecked}' ))
+
+	if (context.expand('${242RoadAll#BRC}') == "Y")
+	{
+		Car1 = context.expand( '${242RoadAll#Car_1}' )
+		Car2 = context.expand( '${242RoadAll#Car_2}' )
+		Car3 = context.expand( '${242RoadAll#Car_3}' )
+		Car4 = context.expand( '${242RoadAll#Car_4}' )
+		if (context.expand('${242RoadAll#Car_4}' ) != "")
+		{
+			product_type = context.expand('${242RoadAll#PRODUCT_TYPE}' )+ ",BRC" + "(" + "Car1:" + Car1 + ",Car2:" + Car2 + ",Car3:" + Car3 + ",Car4:" + Car4 + ")"
+		}
+		else if (context.expand('${242RoadAll#Car_3}' ) != "")
+		{
+			product_type = context.expand('${242RoadAll#PRODUCT_TYPE}' )+ ",BRC" + "(" + "Car1:" + Car1 + ",Car2:" + Car2 + ",Car3:" + Car3 + ")"
+		}
+		else if (context.expand('${242RoadAll#Car_2}' ) != "")
+		{
+			product_type = context.expand('${242RoadAll#PRODUCT_TYPE}' )+ ",BRC" + "("  + "Car1:" + Car1 + ",Car2:" + Car2 + ")"
+		}
+		else
+		{
+			product_type = context.expand('${242RoadAll#PRODUCT_TYPE}' )+ ",BRC" + "(" + "Car1:" + Car1 + ")"
+		}
+	}
+	else
+	{
+		product_type = context.expand( '${242RoadAll#PRODUCT_TYPE}' )
+	}
+
+	if (name == "BasicBreakdown" || name == "LocalDriver" ||  name == "ROCO" || name ==  "ROPOV" || name == "Standby" ||  name == "StartUp" )
+	{
+		 name= "Roadside"
+	}
+	log.info Pass=(context.expand('${242RoadAll#ID}') + "|" + context.expand( '${242RoadAll#OFFER_CODE}' ) + "|"  + payment + "|" + product_type + "|" + context.expand( '${242RoadAll#COVER}' ) + "|" + name + "|" + element + "||| " + RadarValue )
+
+	
+	
+	BufferedWriter bw = new BufferedWriter (new FileWriter (context.expand('${#TestCase#File}'), true));
+	bw.write (Pass);
+	bw.newLine();
+	bw.flush();
+	bw.close();
+	totalOfValuesChecked++
+	testRunner.testCase.setPropertyValue( 'totalOfValuesChecked',  new Integer(totalOfValuesChecked).toString())
+	
+}]]></script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasourceloop" name="DataSource Loop" id="44145f34-fcf2-4b2c-b219-e070f3f7f062">
+    <con:settings/>
+    <con:config>
+      <dataSourceStep>242RoadAll</dataSourceStep>
+      <targetStep>Setup_ProductList_XML</targetStep>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="Log_Results" id="b85bc520-ff18-46eb-ad1f-04af53c3d0a6">
+    <con:settings/>
+    <con:config>
+      <script>log.info("    ********************************")
+log.info("    ************RESULTS*************")
+log.info("    Number of Iterations: " + context.expand( '${#TestCase#NumOfIterations}' ))
+log.info("    Number of Values Checked: " + context.expand( '${#TestCase#TotalOfValuesChecked}' ))
+log.info("    Number of Failed values: " + context.expand( '${#TestCase#NumOfValuesFailed}' ))
+log.info("    Request Date Time: " + context.expand( '${#TestCase#RequestDateTime}' ))
+log.info("    ********************************")
+log.info("    ********************************")
+
+NumberofIterations = ("    Number of Iterations: " + context.expand( '${#TestCase#NumOfIterations}'));
+NumberofValuesChecked = ("    Number of Values Checked: " + context.expand( '${#TestCase#TotalOfValuesChecked}' ));
+NumberofFailedValues = ("    Number of Failed values: " + context.expand( '${#TestCase#NumOfValuesFailed}' ));
+RequestDateTime = ("    RequestDateTime: " + context.expand( '${#TestCase#RequestDateTime}' ));
+
+BufferedWriter bw = new BufferedWriter (new FileWriter (context.expand('${#TestCase#File}'), true));
+bw.write (NumberofIterations);
+bw.newLine();
+bw.write (NumberofValuesChecked);
+bw.newLine();
+bw.write (NumberofFailedValues);
+bw.newLine();
+bw.write (RequestDateTime);
+bw.newLine();
+bw.flush();
+bw.close();</script>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>AgentDiscountsApplied</con:name>
+      <con:value>null</con:value>
+    </con:property>
+    <con:property>
+      <con:name>AgentDiscount_XML</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>BRCList_XML</con:name>
+      <con:value><![CDATA[<gen:VehicleAgeList><gen:VehicleAge>12</gen:VehicleAge><gen:VehicleAge>12</gen:VehicleAge><gen:VehicleAge>13</gen:VehicleAge><gen:VehicleAge>14</gen:VehicleAge></gen:VehicleAgeList>]]></con:value>
+    </con:property>
+    <con:property>
+      <con:name>CalcDeposit</con:name>
+      <con:value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    </con:property>
+    <con:property>
+      <con:name>CalcInstPrem</con:name>
+      <con:value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    </con:property>
+    <con:property>
+      <con:name>Cover</con:name>
+      <con:value>4</con:value>
+    </con:property>
+    <con:property>
+      <con:name>FeeList_XML</con:name>
+      <con:value>&lt;prod:RequestSurchargeAndFeeList>&lt;/prod:RequestSurchargeAndFeeList></con:value>
+    </con:property>
+    <con:property>
+      <con:name>FeesDate</con:name>
+      <con:value>2020-07-10T00:00:01</con:value>
+    </con:property>
+    <con:property>
+      <con:name>File</con:name>
+      <con:value>N:/Systems_development/RIO/Road Renewals/Soap UI/Test Results/NBE2E/NBE2EResults20200115T142124.txt</con:value>
+    </con:property>
+    <con:property>
+      <con:name>FileFailed</con:name>
+      <con:value>N:/Systems_development/RIO/Road Renewals/Soap UI/Test Results/NBE2E/OfferCodeCheckFailed20190926T112744.txt</con:value>
+    </con:property>
+    <con:property>
+      <con:name>FlexFlag</con:name>
+      <con:value>false</con:value>
+    </con:property>
+    <con:property>
+      <con:name>ID</con:name>
+      <con:value>426</con:value>
+    </con:property>
+    <con:property>
+      <con:name>NumOfIterations</con:name>
+      <con:value>199</con:value>
+    </con:property>
+    <con:property>
+      <con:name>NumOfValuesFailed</con:name>
+      <con:value>0</con:value>
+    </con:property>
+    <con:property>
+      <con:name>payment</con:name>
+      <con:value>CMM</con:value>
+    </con:property>
+    <con:property>
+      <con:name>PaymentNumber</con:name>
+      <con:value>1</con:value>
+    </con:property>
+    <con:property>
+      <con:name>PolicyEndDateTime</con:name>
+      <con:value>2021-07-09T23:59:59</con:value>
+    </con:property>
+    <con:property>
+      <con:name>PolicyStartDateTime</con:name>
+      <con:value>2020-07-10T00:00:01</con:value>
+    </con:property>
+    <con:property>
+      <con:name>PriceDate</con:name>
+      <con:value>2020-07-10T00:00:01</con:value>
+    </con:property>
+    <con:property>
+      <con:name>ProductList_XML</con:name>
+      <con:value><![CDATA[<gen:Product><prod:ProductCode>PRD_UK_0001</prod:ProductCode></gen:Product><gen:Product><prod:ProductCode>PRD_UK_0003</prod:ProductCode></gen:Product><gen:Product><prod:ProductCode>PRD_UK_0005</prod:ProductCode></gen:Product><gen:Product><prod:ProductCode>PRD_UK_0009</prod:ProductCode></gen:Product>]]></con:value>
+    </con:property>
+    <con:property>
+      <con:name>RequestDateTime</con:name>
+      <con:value>2020-07-10T00:00:01</con:value>
+    </con:property>
+    <con:property>
+      <con:name>RoadList</con:name>
+      <con:value>PRD_UK_0001</con:value>
+    </con:property>
+    <con:property>
+      <con:name>RoadNameList</con:name>
+      <con:value>Roadside</con:value>
+    </con:property>
+    <con:property>
+      <con:name>TaxType</con:name>
+      <con:value>I</con:value>
+    </con:property>
+    <con:property>
+      <con:name>TotalOfValuesChecked</con:name>
+      <con:value>20602</con:value>
+    </con:property>
+    <con:property>
+      <con:name>TaxDateTime</con:name>
+      <con:value>2020-07-10T00:00:01</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+  <con:breakPoints>
+    <con:testStepId>587dbd92-49e6-4efc-8f31-27705cd3bf3d</con:testStepId>
+    <con:status>NONE</con:status>
+    <con:properties/>
+  </con:breakPoints>
+  <con:breakPoints>
+    <con:testStepId>19f19534-56e8-43f9-8b19-c168c966a8fb</con:testStepId>
+    <con:status>NONE</con:status>
+    <con:properties/>
+  </con:breakPoints>
+  <con:breakPoints>
+    <con:testStepId>47d4eefb-9c3e-4632-9cbf-8dacafbd668d</con:testStepId>
+    <con:status>NONE</con:status>
+    <con:properties/>
+  </con:breakPoints>
+  <con:breakPoints>
+    <con:testStepId>b6f8f58a-de4c-469b-b4a2-298fb8140875</con:testStepId>
+    <con:status>NONE</con:status>
+    <con:properties/>
+  </con:breakPoints>
+  <con:breakPoints>
+    <con:testStepId>cc07d066-3ef6-4f4b-b6c7-e72872ca7f79</con:testStepId>
+    <con:status>NONE</con:status>
+    <con:properties/>
+  </con:breakPoints>
+  <con:breakPoints>
+    <con:testStepId>37877e1b-c83e-4917-99a5-e3ec9045a383</con:testStepId>
+    <con:status>NONE</con:status>
+    <con:properties/>
+  </con:breakPoints>
+  <con:breakPoints>
+    <con:testStepId>ecc17eaf-cbca-4efd-af6e-176900fd8b4d</con:testStepId>
+    <con:status>NONE</con:status>
+    <con:properties/>
+  </con:breakPoints>
+</con:testCase>

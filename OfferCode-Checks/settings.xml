@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite id="2ff3d58c-d912-4445-b05e-d92486cf575b" name="OfferCode Checks" xmlns:con="http://eviware.com/soapui/config">
+  <con:settings>
+    <con:setting id="a0ecef9d-d5f2-47d0-b9b1-123b7fd625a9fileName">OfferCode-Checks</con:setting>
+    <con:setting id="2ff3d58c-d912-4445-b05e-d92486cf575bfileName">OfferCode-Checks</con:setting>
+  </con:settings>
+  <con:savedRecentRuns>1</con:savedRecentRuns>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+</con:testSuite>

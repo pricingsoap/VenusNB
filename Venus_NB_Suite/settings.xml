@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite id="359e83da-6de8-4aaa-a989-d325d59907c7" name="Venus_NB_Suite" xmlns:con="http://eviware.com/soapui/config">
+  <con:settings>
+    <con:setting id="84d4ad8b-7f7e-453d-90e4-737d5255d759fileName">EndtoEndPrice</con:setting>
+    <con:setting id="b45d7f3f-65e1-4fef-b5b4-b09d52a84890fileName">242EndtoEndPrice</con:setting>
+    <con:setting id="048e0bc1-ef18-4c17-891a-a7d1b05e99c5fileName">New242E2EPrice</con:setting>
+    <con:setting id="359e83da-6de8-4aaa-a989-d325d59907c7fileName">Venus_NB_Suite</con:setting>
+  </con:settings>
+  <con:savedRecentRuns>1</con:savedRecentRuns>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+</con:testSuite>
